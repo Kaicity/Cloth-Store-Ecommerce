@@ -29,4 +29,7 @@
 - Use "docker-compose up" command to use docker-compose
 
 
+## Cloud domain Admin website:
+https://ctadfe-gfhhfhrxpa-as.a.run.app
+
 
