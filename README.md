@@ -1,4 +1,8 @@
-# Config Yaml Docker and run Docker-compose
+# Clone 4 projects to your device
+- create new folder
+- open terminal at folder Run `$git clone https://github.com/Kaicity/Cloth-Store-Ecommerce.git`
+
+## Config Yaml Docker and run Docker-compose
 - You need to check if the images are already in the docker desktop. Here we need 6 images including 2 FE, 2BE and 2 Database
 ![image](https://github.com/Kaicity/Cloth-Store-Ecommerce/assets/93094572/c5bb48b0-b055-4ff7-8e92-22436e75079a)
 - Once done, you need to check in docker-compose to see if the image name configuration is the same as the name you built the image with
