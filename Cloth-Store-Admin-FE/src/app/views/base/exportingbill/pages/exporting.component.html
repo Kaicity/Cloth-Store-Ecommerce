@@ -1,0 +1,206 @@
+<app-spinner [isLoading]="isShowLoading"></app-spinner>
+<!-- Content Header (Page header) -->
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 68vw">
+    <div class="col-auto d-flex">
+      <c-breadcrumb>
+        <c-breadcrumb-item url="#">Trang chủ</c-breadcrumb-item>
+        <c-breadcrumb-item [active]="true">Đơn đặt hàng</c-breadcrumb-item>
+      </c-breadcrumb>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 0.1vw">
+    <div class="col-auto d-flex justify-content-between align-items-center">
+      <div class="container-title">
+        <h1>Đơn đặt hàng</h1>
+      </div>
+      <div class="col-auto" style="margin-left: 60vw;">
+        <button type="button" class="btn btn-primary  mr-2" style="height: 4vh; width: 4vw" (click)="showSeachForm()">
+          <img src="assets/images/seach.png" class="icon-search" style="width: 1vw; height: 2vh">
+        </button>
+        <button class="btn bg-warning" (click)="showInsertForm()" style="margin-left: 0.4vw">
+          Tạo đơn đặt hàng
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container class="container-header">
+  <div class="row">
+    <div class="col-md-4" style="margin-left: 0.5vw">
+      <div class="input-group">
+        <input type="search" class="form-control search-icon" aria-label="Search content" (input)="filterImporting()"
+               [(ngModel)]="searchTermTable"
+               [ngModelOptions]="{standalone: true}"
+               placeholder="Tìm kiếm phiếu theo mã phiếu, tên nhà cung cấp, giá" id="search" name="per">
+        <span class="input-group-text"><img src="assets/images/seach.png" class="icon-search"
+                                            style="width: 1vw; height: 2vh"></span>
+      </div>
+    </div>
+
+    <div class="col-md-4" style="width: 10vw; max-width: 100%">
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterStatus"
+                data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false"
+                style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center; background-color: white">
+          <span class="caret">{{ isFillStatus }}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right w-100 overflow-scroll" style="cursor: pointer">
+          <ng-container *ngFor="let f of displayImportingFilter; let i = index">
+            <a class="dropdown-item" (click)="getFilterStatus(f.value, f.display)">
+              {{ f.display }}
+            </a>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <mat-form-field class="example-form-field" style="height: 7vh">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="rangePicker">
+          <input matStartDate placeholder="Start date">
+          <input matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="rangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker>
+          <mat-date-range-picker-actions>
+            <button mat-button matDateRangePickerCancel>Cancel</button>
+            <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
+          </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-3" style="margin-left: 1.5vw">
+      <button class="btn btn-outline btn-custom-exl" (click)="exportDataToExcels()">
+        Xuất File Excel
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="exportingfulls.length !== 0">
+  <app-data-table [columnNumber]="7" [tableFormatClass]="tableFormat" [search]="exportSearch"
+                  [data2Show]="exportingfulls">
+    <table class="{{tableFormat}}">
+      <thead>
+      <tr>
+        <th>B-ID</th>
+        <th>Họ Tên</th>
+        <th>Tên Sản Phẩm</th>
+        <th>Trạng Thái</th>
+        <th>Tổng cộng</th>
+        <th>Ngày tạo</th>
+        <th>Ngày cập nhật</th>
+        <th>SĐT</th>
+        <th>Email</th>
+        <th>Đ/C</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let e of exportingFill;">
+        <tr *ngFor="let t of e.exportingBillTransactions;">
+          <td>{{ e.exportingBill?.code }} {{ e.exportingBill?.customerNotLogin?.eid}}</td>
+          <td>{{ e.exportingBill?.customer?.fullName }} {{e.exportingBill?.customerNotLogin?.fullName}}</td>
+          <td>{{ t.product?.name }}</td>
+          <td>
+            <span *ngIf="e.exportingBill?.status === 'BOOKING'" class="dot-orange"></span>
+            <span *ngIf="e.exportingBill?.status === 'CHECKED'" class="dot-blue"></span>
+            <span *ngIf="e.exportingBill?.status === 'CANCELLED'" class="dot-red"></span>
+            <span *ngIf="e.exportingBill?.status === 'COMPELETED'" class="dot-green"></span>
+            <span *ngIf="e.exportingBill?.status === 'SHIPPING'" class="dot-grey"></span>
+            {{ getStatusOfImporting(e.exportingBill!.status!) }}
+          </td>
+          <td>{{ e.exportingBill?.total | currency: 'VND' | slice:1 }}
+            <span class="symbol"
+                  style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+          </td>
+          <td>{{ e.exportingBill?.dateCreated | date : 'dd/MM/YYYY, h:mm a' }}</td>
+          <td>{{ e.exportingBill?.dateExport | date : 'dd/MM/YYYY, h:mm a' }}</td>
+          <td>{{e.exportingBill?.customerNotLogin?.phone}}</td>
+          <td>{{e.exportingBill?.customerNotLogin?.email}}</td>
+          <td>{{e.exportingBill?.customerNotLogin?.address}}</td>
+
+          <td style="width: 4.5vw">
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-dropdown"
+                    (click)="getExportingData(e.exportingBill?.id!, e)">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+          </td>
+
+        </tr>
+      </ng-container>
+      </tbody>
+    </table>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="updateExporting()">
+        <mat-icon>edit</mat-icon>
+        <span>Sửa</span>
+      </button>
+
+      <button mat-menu-item (click)="deleteExporting()">
+        <mat-icon>delete</mat-icon>
+        <span>Xóa</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>list</mat-icon>
+        <span>D.Sách HH - VT</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>print</mat-icon>
+        <span>In</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>Excel</mat-icon>
+        <span>Xuất File Excel</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Lập P.Chi</span>
+      </button>
+
+      <button mat-menu-item (click)="createImportingReturn()">
+        <mat-icon>money</mat-icon>
+        <span>Trả hàng</span>
+      </button>
+
+    </mat-menu>
+
+  </app-data-table>
+</ng-container>
+
+<app-alert></app-alert>
+<app-add-export #AddWrapper
+                [btnName]="isBtnName"
+                [customerNames]="ListNameCustomer"
+                [exportingBillTransactions]="exportingTransactionInfo"
+                [exporting]="exportingInfo"
+                [importingStatus]="statusValue"
+                [products]="productsName"
+                [customerInfor]="customerInfor"
+                [productFill]="products"
+                [isCheckOrder]="isCheckBtnOrderOrAdd"
+></app-add-export>
+
+
+
+
+
+
+
+
+
+

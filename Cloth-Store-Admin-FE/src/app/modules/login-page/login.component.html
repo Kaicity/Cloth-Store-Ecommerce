@@ -1,0 +1,29 @@
+<div class="login-container">
+  <ng-container *ngIf="isShowLoading">
+    <div class="spinner-border text-primary" role="status" style="margin-left: 21vw; position: absolute">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </ng-container>
+  <div class="content">
+    <img src="../../../assets/images/adminLogo.png" alt="icon">
+  </div>
+  <p></p>
+  <h2>Admin Login</h2>
+  <p>Welcome back. Enter your credentials to access your account</p>
+  <form (ngSubmit)="onSubmit()" #userform="ngForm">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" class="form-control" required [(ngModel)]="signIn.email">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <span href="#" style="font-size: 12px; margin-left: 13vw; color: blue">Forgot the password</span>
+      <input type="password" id="password" name="password" class="form-control" required [(ngModel)]="signIn.password">
+    </div>
+    <div class="form-group">
+      <input type="checkbox" id="keep_signed_in" [(ngModel)]="isKeepSigin" name="keep_signed_in">
+      <label for="keep_signed_in" style="margin-left: 1vw">Keep me signed in</label>
+    </div>
+    <button type="submit" class="btn btn-primary" (click)="btnLogin()" [disabled]="userform.invalid">Login</button>
+  </form>
+</div>

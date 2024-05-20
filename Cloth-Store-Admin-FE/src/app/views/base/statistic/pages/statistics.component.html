@@ -1,0 +1,137 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <h1>Statistics</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a i18n="@@home" routerLink="/">Home</a></li>
+          <li class="breadcrumb-item active">Statistics</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+  <!--  </div>-->
+</section>
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="tab-content">
+          <!-- body report          -->
+          <div class="tab-pane fade active show">
+            <div class="row">
+              <div class="col-12" style="padding: 0">
+                <div class="card">
+                  <!-- /.card-header -->
+                  <div class="card-body" id="sale-report-body">
+                    <div class="col-sm-2">
+                      <div class="col-12">
+                        <h5 i18n="@@sale-report-quickly-optionSizes">Report</h5>
+                      </div>
+                      <select [(ngModel)]="reportType" (ngModelChange)="onReportTypeChange()" class="form-control">
+                        <option *ngFor="let item of reportTypesNames" [value]="item.id">{{ item.name }}</option>
+                      </select>
+                    </div>
+                    <hr>
+                    <div class="row mb-1">
+                      <div class="col-12">
+                        <h5 i18n="@@sale-report-quickly-optionSizes">Quickly optionSizes</h5>
+                      </div>
+                      <div class="col-md-8">
+                        <button (click)="onGetSaleReport('day')" class="btn btn-success mr-2"
+                                i18n="@@sale-report-quickly-optionSizes-1">Today
+                        </button>
+                        <button (click)="onGetSaleReport('week')" class="btn btn-success mr-2"
+                                i18n="@@sale-report-quickly-optionSizes-2">Week
+                        </button>
+                        <button (click)="onGetSaleReport('month')" class="btn btn-success mr-2"
+                                i18n="@@sale-report-quickly-optionSizes-3">Monthly
+                        </button>
+                        <!--                        <button (click)="onGetSaleReport('quarter')" class="btn btn-success mr-2"-->
+                        <!--                                i18n="@@sale-report-quickly-optionSizes-4">Quarterly-->
+                        <!--                        </button>-->
+                        <button (click)="onGetSaleReport('year')" class="btn btn-success mr-2"
+                                i18n="@@sale-report-quickly-optionSizes-5">Yearly
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <div class="col-sm-2">
+                        <label>From date</label>
+                        <p-calendar [(ngModel)]="query.fromDate"
+                                    styleClass="w-100"
+                                    inputStyleClass="form-control" dateFormat="mm/dd/y"></p-calendar>
+                      </div>
+                      <div class="col-sm-2">
+                        <label>To date</label>
+                        <p-calendar [(ngModel)]="query.toDate" styleClass="w-100"
+                                    inputStyleClass="form-control" dateFormat="mm/dd/y"></p-calendar>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                      <div class="col-sm-2">
+                        <label>Display</label>
+                        <div class="row-sm-2" style="margin-top: 0.5vw">
+                          <input type="checkbox" id="dataList" [(ngModel)]="showDataList">
+                          <label for="dataList" style="margin-left: 0.5vw">Table</label>
+                          <input type="checkbox" id="graph" [(ngModel)]="showGraph" style="margin-left: 1.5vw">
+                          <label for="graph" style="margin-left: 0.5vw">Chart</label>
+                        </div>
+                      </div>
+                      <div class="col-sm-2">
+                        <label>&nbsp;</label>
+                        <button (click)="getReport()"
+                                class="form-control btn btn-success mr-2">
+                          <span i18n="@@search">Run report</span>
+                        </button>
+                      </div>
+                      <div class="col-sm-2">
+                        <label>&nbsp;</label>
+                        <button (click)="exportReport()" class="form-control btn btn-success">
+                          <i class="fas fa-file-excel mr-1"></i><span i18n="@@print">Export Excel</span>
+                        </button>
+                      </div>
+                    </div>
+                    <hr>
+                  </div>
+                  <!--                  <ng-container *ngIf="reportType === reportTypesNames[0].id ">-->
+                  <!--                    <app-new-customer-graph-statistic #graph [ngStyle]="{'display': showGraph ? null : 'none'}"-->
+                  <!--                                                      [hidden]="isRunningReport !== reportTypesNames[0].id "></app-new-customer-graph-statistic>-->
+                  <!--                    <app-new-customer-detail-statistic #detailNewCustomer-->
+                  <!--                                                       [ngStyle]="{'display': showDataList ? null : 'none'}"-->
+                  <!--                                                       [hidden]="isRunningReport !== reportTypesNames[0].id "></app-new-customer-detail-statistic>-->
+                  <!--                  </ng-container>-->
+
+                  <!--                  <ng-container *ngIf="reportType === reportTypesNames[1].id ">-->
+                  <!--                    <app-average-revenue-graph-statistic #ticketGraph [ngStyle]="{'display': showGraph ? null : 'none'}"-->
+                  <!--                                                         [hidden]="isRunningReport !== reportTypesNames[1].id "></app-average-revenue-graph-statistic>-->
+                  <!--                    <app-average-revenue-detail-statistic #detailInvoice-->
+                  <!--                                                          [ngStyle]="{'display': showDataList ? null : 'none'}"-->
+                  <!--                                                          [hidden]="isRunningReport !== reportTypesNames[1].id "></app-average-revenue-detail-statistic>-->
+                  <!--                  </ng-container>-->
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+</section>
+
+

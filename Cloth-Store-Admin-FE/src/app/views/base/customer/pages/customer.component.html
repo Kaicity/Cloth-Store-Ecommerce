@@ -1,0 +1,164 @@
+<app-spinner [isLoading]="isShowLoading"></app-spinner>
+<!-- Content Header (Page header) -->
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 68vw">
+    <div class="col-auto d-flex">
+      <c-breadcrumb>
+        <c-breadcrumb-item url="#">Trang chủ</c-breadcrumb-item>
+        <c-breadcrumb-item [active]="true">Phiếu Nhập hàng</c-breadcrumb-item>
+      </c-breadcrumb>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 0.1vw">
+    <div class="col-auto d-flex justify-content-between align-items-center">
+      <div class="container-title">
+        <h1>Danh sách Khách hàng</h1>
+      </div>
+      <div class="col-auto" style="margin-left: 54.5vw;">
+        <button type="button" class="btn btn-primary  mr-2" style="height: 4vh; width: 4vw" (click)="showSeachForm()">
+          <img src="assets/images/seach.png" class="icon-search" style="width: 1vw; height: 2vh">
+        </button>
+        <button class="btn bg-warning" (click)="showInsertForm()" style="margin-left: 0.4vw">
+          Thêm khách hàng
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container class="container-header">
+  <div class="row">
+    <div class="col-md-4" style="margin-left: 0.5vw">
+      <div class="input-group">
+        <input type="search" class="form-control search-icon" aria-label="Search content" (input)="filterCustomer()"
+               [(ngModel)]="searchTermTable"
+               [ngModelOptions]="{standalone: true}"
+               placeholder="Tìm kiếm theo tên, số điện thoại hoặc địa chỉ" id="search" name="per">
+        <span class="input-group-text"><img src="assets/images/seach.png" class="icon-search"
+                                            style="width: 1vw; height: 2vh"></span>
+      </div>
+    </div>
+
+    <div class="col-md-4" style="width: 10vw; max-width: 100%">
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterStatus"
+                data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false"
+                style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center; background-color: white">
+          <span class="caret">{{ isFillGender }}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right w-100 overflow-scroll" style="cursor: pointer">
+          <ng-container *ngFor="let f of genderCustomer; let i = index">
+            <a class="dropdown-item" (click)="getFilterStatus(f.value, f.display)">
+              {{ f.display }}
+            </a>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <button class="btn btn-outline btn-custom-exl" (click)="exportDataToExcels()">
+        Xuất File Excel
+      </button>
+    </div>
+
+  </div>
+  <p></p>
+</ng-container>
+
+<ng-container *ngIf="customers.length !== 0">
+  <app-data-table [columnNumber]="12" [tableFormatClass]="tableFormat" [search]="search"
+                  [data2Show]="customers">
+    <table class="{{tableFormat}}" style="overflow: scroll">
+      <thead>
+      <tr>
+        <th>K-ID</th>
+        <th>Họ Tên</th>
+        <th>SĐT</th>
+        <th>Địa Chỉ</th>
+        <th>Ngày sinh</th>
+        <th>Ngày tạo</th>
+        <th>Ngày cập nhật</th>
+        <th>Email</th>
+        <th>Giới tính</th>
+        <th>Hạng</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let c of customerFill;">
+        <td>{{ c.eid }}</td>
+        <td>{{ c.fullName }}</td>
+        <td>{{ c.phone }}</td>
+        <td>{{ c.address }}</td>
+        <td>{{ c.birthday | date : 'dd/MM/YYYY'}}</td>
+        <td>{{ c.dateCreated | date : 'dd/MM/YYYY, h:mm a' }}</td>
+        <td>{{ c.dateUpdated | date : 'dd/MM/YYYY, h:mm a' }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.gender }}</td>
+        <td>{{ c.ranking }}</td>
+        <td style="width: 3vw">
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-dropdown" (click)="getCustomerData(c.id!,c)">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="updateCustomer()">
+        <mat-icon>edit</mat-icon>
+        <span>Sửa</span>
+      </button>
+
+      <button mat-menu-item (click)="deteleCustomer()">
+        <mat-icon>delete</mat-icon>
+        <span>Xóa</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>list</mat-icon>
+        <span>D.Sách HH - VT</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>print</mat-icon>
+        <span>In</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>Excel</mat-icon>
+        <span>Xuất File Excel</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Lập P.Chi</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Tạo Từ Phiếu Này</span>
+      </button>
+
+    </mat-menu>
+
+  </app-data-table>
+</ng-container>
+
+<app-alert></app-alert>
+<app-add-customer #AddWrapper [btnName]="isBtnName" [customer]="customerInformation" [genderDisplay]="genderValue"
+></app-add-customer>
+
+
+
+
+
+
+
+

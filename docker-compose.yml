@@ -1,0 +1,39 @@
+version: '2.1'
+
+services:
+  warehousedb:
+    image: warehousedb
+    ports:
+      - 3307:3306
+    restart: always
+
+  agencydb:
+    image: agencydb
+    ports:
+      - 3308:3306
+    restart: always
+
+  clientfe:
+    image: clientfe
+    ports:
+      - 4201:4201
+    restart: always
+
+  ctadfe:
+    image: ctadfe
+    ports:
+      - 4202:4202
+    restart: always
+
+  agencybe:
+    image: agencybe
+    ports:
+      - 5555:5555
+    restart: always
+
+  warehousebe:
+    image: warehousebe
+    ports:
+      - 5556:5556
+    restart: always
+

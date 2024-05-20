@@ -1,0 +1,192 @@
+<app-modal-wrapper #AddWrapper
+                   [showModal]="isInsertChose"
+                   [modalTitle]="'Thêm Khách Hàng'"
+                   [nameButton]="'Thêm'"
+                   [size]="'width: 65%; max-width: 100%;'"
+                   (closeModalEvent)="closeModal()">
+
+  <!-- Your modal content goes here -->
+  <div class="modal-lg">
+    <form #myForm="ngForm" class="row g-3" (ngSubmit)="onSubmit()">
+      <div class="mb-3 col-md-4">
+        <label for="fullname" class="col-form-label">Tên Khách hàng</label>
+        <input type="text" class="form-control" id="FullName" name="fullName"
+               [(ngModel)]="customerInfor.fullName!" [ngModelOptions]="{standalone: true}" [readonly]="true"
+               required>
+      </div>
+
+      <div class="mb-3 col-md-4">
+        <label for="Phone" class="col-form-label">Số Điện thoại</label>
+        <input type="text" class="form-control" id="Phone" name="phone" [readonly]="true"
+               [(ngModel)]="customerInfor.phone!" [ngModelOptions]="{standalone: true}" required>
+
+      </div>
+      <!-- Và các trường khác của khách hàng -->
+
+      <div class="mb-3 col-md-4">
+        <label for="address" class="col-form-label">Địa Chỉ</label>
+        <input type="text" class="form-control" aria-label="Dollar amount" id="address" name="address"
+               [readonly]="true"
+               [(ngModel)]="customerInfor.address!" [ngModelOptions]="{standalone: true}" required>
+      </div>
+
+      <!-- Các trường nhập liệu khác -->
+
+      <div class="mb-3 col-md-3 ">
+        <label class="col-form-label">Mã Khách Hàng</label>
+        <div class="input-group">
+          <app-auto-complete #autoCompleteComponent [options]="customerNames"
+                             (selected)="receiveSelectedOption( $event)"
+                             class="typecustomer"></app-auto-complete>
+        </div>
+      </div>
+      <div class="mb-3 col-md-2">
+        <label class="col-form-label">Trạng Thái</label>
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="spec"
+                  data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;"
+                  [disabled]="isCheckOrder">
+            <p *ngIf="isCheckOrder">{{ SpecificationExporting[0].display }}</p>
+            {{ statust || genderDisplay }}
+            <!-- Sử dụng placeholder hoặc genderDisplay nếu placeholder không tồn tại -->
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer">
+            <ng-container *ngFor="let s of SpecificationExporting">
+              <a class="dropdown-item" (click)="optionSpecChose(s.display)">{{ s.display }}</a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3 col-md-3">
+        <label for="agencyID" class="col-form-label">Mã đại lý</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="agencyID" name="per"
+                 [ngModel]="exporting.agency?.code" [ngModelOptions]="{standalone: true}" [disabled]="true"
+                 [value]="exporting.agency?.code" [placeholder]="agencyCode">
+        </div>
+      </div>
+
+      <div class="md-3 col-md-2">
+        <br><br>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="status1"
+                 value="{{ displayImporting[0].value }}"
+                 [checked]="importingStatus == ImportingStatus.COMPLETE"
+                 (click)="getStatusOnline(displayImporting[0].value)">
+          <label class="form-check-label" for="status1">
+            {{ displayImporting[0].display }}
+          </label>
+        </div>
+      </div>
+
+      <div class="md-3 col-md-2">
+        <br><br>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="status2"
+                 value="{{ displayImporting[1].value }}"
+                 [checked]="importingStatus == ImportingStatus.UNCOMPLETE"
+                 (click)="getStatusDemo(displayImporting[1].value)">
+          <label class="form-check-label" for="status2">
+            {{ displayImporting[1].display }}
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <label for="address">Sản phẩm</label>
+        <input type="text" class="form-control" (focus)="toggleDropdown()"
+               [value]="productNameDisplay" placeholder="Lọc sản phẩm" [(ngModel)]="searchTerm"
+               [ngModelOptions]="{standalone: true}"
+               (input)="filterProducts()">
+
+        <div class="dropdownProduct" [ngClass]="{'show': showDropdown}">
+          <div><h2>Tổng sản phẩm hiển thị: {{ productFill.length }}</h2></div>
+          <div *ngFor="let p of productFill">
+            <div class="flex-row" (click)="selectOption(p)">
+              <img [src]="p.image" alt="image" class="product-image">
+              <span style="margin-left: 1vw">{{ p.code }}</span>
+              <span style="margin-left: 1vw">{{ p.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label for="quantity">Số lượng</label>
+        <input type="text" class="form-control" id="quantity" required
+               [(ngModel)]="exportingTransaction.quantity"
+               [ngModelOptions]="{standalone: true}" #qty="ngModel" (keypress)="validateInput($event)">
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label for="thisAmount">Giá</label>
+        <input type="text" class="form-control" id="thisAmount" placeholder=".000 đ" required
+               [(ngModel)]="exportingTransaction.amount" appThousandSeparator
+               [ngModelOptions]="{standalone: true}" #price="ngModel"
+               (keypress)="validateInput($event)">
+      </div>
+      <div class="col-md-1 mb-3">
+        <br>
+        <button type="button" class="btn btn-primary"
+                (click)="addProductToTable()"
+                [disabled]="!exportingTransaction.quantity || !exportingTransaction.amount || !productNameDisplay">
+          Thêm
+        </button>
+      </div>
+      <div class="mb-3" *ngIf="showTableSize">
+        <div class="tb-size" style="height: 20vh; overflow: scroll">
+          <table class="table table-lg table-bordered">
+            <thead>
+            <tr>
+              <th style="width: 4vw"></th>
+              <th scope="col">#</th>
+              <th scope="col">Tên sản phẩm</th>
+              <th scope="col">Số lượng</th>
+              <th scope="col">Giá Sản Phẩm</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+              <td colspan="5">Tổng Tiền: {{ getAmount() | currency: 'VND' | slice:1 }}
+                <span class="symbol" style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+              </td>
+            </tr>
+            </tfoot>
+            <tbody>
+            <tr *ngFor="let s of exportingBillTransactions; let i = index">
+              <td>
+                <button class="btn btn-close" (click)="removeItemImportingTransaction(i)"></button>
+              </td>
+              <td>{{ no + i }}</td>
+              <td>{{ s.product?.name }}</td>
+              <td class="quantity">
+                <div class="quantity-controls">
+                  <a (click)="decrementQuantity(i)">-</a>
+                  <span [hidden]="s.quantity! >= 10">0</span>
+                  {{ s.quantity }}
+                  <a (click)="incrementQuantity(i)">+</a>
+                </div>
+              </td>
+              <td>{{ s.product?.price | currency: 'VND' | slice:1 }}
+                <span class="symbol" style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary"
+                (click)="addOrUpdateFunc()">{{ btnName[0].display }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+</app-modal-wrapper>

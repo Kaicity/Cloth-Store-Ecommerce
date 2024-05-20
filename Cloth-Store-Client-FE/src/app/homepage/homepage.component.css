@@ -1,0 +1,48 @@
+.carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+}
+
+.carousel-indicators span {
+    background-color: darkgray;
+    /* Màu nền của indicator chưa được chọn */
+    border-radius: 50%;
+    /* Bo tròn các góc để tạo hình tròn */
+    width: 12px;
+    /* Kích thước chiều rộng của indicator */
+    height: 12px;
+    /* Kích thước chiều cao của indicator */
+    margin-right: 5px;
+    /* Khoảng cách giữa các indicator */
+    cursor: pointer;
+    transition: background-color 0.6s ease;
+}
+
+.carousel-indicators span:active {
+    background-color: #333;
+    /* Màu nền của indicator được chọn */
+}
+
+.btn {
+    width: 16%;
+    height: 50px;
+    font-size: 22px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    /* Đặt nút ở giữa theo chiều dọc */
+    left: 50%;
+    /* Đặt nút ở giữa theo chiều ngang */
+    transform: translate(-50%, -50%);
+    /* Dịch chuyển nút để căn giữa */
+    color: black;
+
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+

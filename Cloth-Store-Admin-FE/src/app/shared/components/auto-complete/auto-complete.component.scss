@@ -1,0 +1,27 @@
+/* Định dạng cho trường nhập */
+.mat-form-field {
+  height: 6.5vh;
+  width: 80%;
+  border-radius: 2px;
+  margin-left: 5vh;
+}
+
+/* Định dạng cho danh sách gợi ý */
+.mat-autocomplete-panel {
+  max-height: 100px; /* Chiều cao tối đa của danh sách gợi ý */
+  overflow-y: auto; /* Hiển thị thanh cuộn nếu danh sách quá dài */
+}
+.hello{
+  height: 6.5vh;
+  width: 100%;
+}
+.mat-option {
+  padding: 3px 8px; /* Khoảng cách giữa các tùy chọn */
+  cursor: pointer; /* Con trỏ chuột khi di chuột vào các tùy chọn */
+  width: 10px;
+  height: 10px;
+}
+
+.mat-option:hover {
+  background-color: white; /* Màu nền khi di chuột vào */
+}

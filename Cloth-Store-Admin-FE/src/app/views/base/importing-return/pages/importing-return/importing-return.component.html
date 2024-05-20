@@ -1,0 +1,163 @@
+<app-spinner [isLoading]="isShowLoading"></app-spinner>
+<!-- Content Header (Page header) -->
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 68vw">
+    <div class="col-auto d-flex">
+      <c-breadcrumb>
+        <c-breadcrumb-item url="#">Trang chủ</c-breadcrumb-item>
+        <c-breadcrumb-item [active]="true">Phiếu nhập trả</c-breadcrumb-item>
+      </c-breadcrumb>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 0.1vw">
+    <div class="col-auto d-flex justify-content-between align-items-center">
+      <div class="container-title">
+        <h1>Danh sách phiếu nhập trả</h1>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<ng-container class="container-header">
+  <div class="row">
+    <div class="col-md-4" style="margin-left: 0.5vw">
+      <div class="input-group">
+        <input type="search" class="form-control search-icon" aria-label="Search content" (input)="filterImportingReturn()"
+               [(ngModel)]="searchTermTable"
+               [ngModelOptions]="{standalone: true}"
+               placeholder="Tìm kiếm phiếu theo mã phiếu, tên người đặt, giá" id="search" name="per">
+        <span class="input-group-text"><img src="assets/images/seach.png" class="icon-search"
+                                            style="width: 1vw; height: 2vh"></span>
+      </div>
+    </div>
+
+    <div class="col-md-1" style="width: 10vw; max-width: 100%">
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterStatus"
+                data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false"
+                style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center; background-color: white">
+          <span class="caret">{{ isFillStatus }}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right w-100 overflow-scroll" style="cursor: pointer">
+          <ng-container *ngFor="let f of displayImportingReturnFilter; let i = index">
+            <a class="dropdown-item" (click)="getFilterStatus(f.value, f.display)">
+              {{ f.display }}
+            </a>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <button class="btn btn-outline btn-custom-exl" (click)="exportDataToExcels()">
+        Xuất File Excel
+      </button>
+    </div>
+  </div>
+  <p></p>
+</ng-container>
+
+
+<ng-container *ngIf="importingReturns.length !== 0">
+  <app-data-table [columnNumber]="7" [tableFormatClass]="tableFormat" [search]="importingReturnSearch"
+                  [data2Show]="importingReturns">
+    <table class="{{tableFormat}}">
+      <thead>
+      <tr>
+        <th>Code phiếu nhập</th>
+        <th>Ngày trả hàng</th>
+        <th>Code</th>
+        <th>Tên người đặt</th>
+        <th>Tình trạng</th>
+        <th>Ngày đặt hàng</th>
+        <th>Tiền hàng</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let i of importingReturnFill;">
+        <td>{{ i.importingReturn!.exporting?.code }}</td>
+        <td>{{ i.importingReturn!.dateCreated | date : 'dd/MM/YYYY, h:mm a'}}</td>
+        <td>{{ i.importingReturn!.code }}</td>
+        <td>{{ i.importingReturn!.customer?.fullName! }}</td>
+        <td>
+          <span *ngIf="i.importingReturn?.status === 'COMPELETED'" class="dot-green"></span>
+          <span *ngIf="i.importingReturn?.status === 'CHECKED'" class="dot-blue"></span>
+          <span *ngIf="i.importingReturn?.status === 'BOOKING'" class="dot-orange"></span>
+          <span *ngIf="i.importingReturn?.status === 'CANCELLED'" class="dot-red"></span>
+          <span *ngIf="i.importingReturn?.status === 'SHIPPING'" class="dot-grey"></span>
+          {{ getStatusOfImportingReturn(i.importingReturn?.status!) }}
+        </td>
+
+
+        <td>{{ i.importingReturn!.dateExport | date : 'dd/MM/YYYY, h:mm a' }}</td>
+        <td>{{ i.importingReturn!.total | currency: 'VND' | slice:1 }}
+          <span class="symbol"
+                style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+        </td>
+        <td style="width: 4.5vw">
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-dropdown"
+                  (click)="getImportingReturnData(i.importingReturn?.id!, i)">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="updateImportingReturn()">
+        <mat-icon>edit</mat-icon>
+        <span>Sửa</span>
+      </button>
+
+      <button mat-menu-item (click)="deleteImportingReturn()">
+        <mat-icon>delete</mat-icon>
+        <span>Xóa</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>list</mat-icon>
+        <span>D.Sách HH - VT</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>print</mat-icon>
+        <span>In</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>Excel</mat-icon>
+        <span>Xuất File Excel</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Lập P.Chi</span>
+      </button>
+
+      <button mat-menu-item >
+        <mat-icon>money</mat-icon>
+        <span>Tạo Từ Phiếu Này</span>
+      </button>
+    </mat-menu>
+  </app-data-table>
+</ng-container>
+
+<app-add-importing-return #AddWrapper
+                          [customers]="customerName"
+                          [btnName]="isBtnName"
+                          [importingReturn]="importingReturnInformation"
+                          [importingReturnTransactions]="importingReturnTransactionInformation"
+                          [importingReturnStatus]="statusValue"
+                          [showTableSize]="importingReturnTransactionInformation.length != 0"
+                          [customerNameDisplay]="importingReturnInformation.customer?.fullName!"
+                          [products]="productsName"
+                          [productFill]="products"></app-add-importing-return>
+
+<app-search-importing-return #searchWrapper></app-search-importing-return>

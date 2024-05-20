@@ -1,0 +1,11 @@
+mat-form-field {
+  height: 6.7vh;
+  width: 20vh;
+  Position:relative;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  bottom: 0.3vh;
+  z-index: 9999; // Chọn một giá trị z-index phù hợp
+}
+

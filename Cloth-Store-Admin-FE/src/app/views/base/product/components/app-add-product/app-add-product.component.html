@@ -1,0 +1,281 @@
+<app-modal-wrapper #AddWrapper
+                   [showModal]="isInsertChose"
+                   [modalTitle]="'Thêm Sản Phẩm'"
+                   [nameButton]="'Thêm'"
+                   [size]="'width: 65%; max-width: 100%;'"
+                   (closeModalEvent)="closeModal()" xmlns="http://www.w3.org/1999/html">
+
+  <!-- Your modal content goes here -->
+  <div class=".modal-lg">
+    <form #myForm="ngForm" class="row g-3" (ngSubmit)="onSubmit()">
+      <div class="mb-3 col-md-4">
+        <label for="productName" class="col-form-label">Tên sản phẩm</label>
+        <input type="text" class="form-control" id="productName" name="productName"
+               [(ngModel)]="product.name" [ngModelOptions]="{standalone: true}" #nameP="ngModel" required>
+      </div>
+
+      <div class="mb-3 col-md-3">
+        <label for="price" class="col-form-label">Giá</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="price" name="price"
+                 [(ngModel)]="product.price" [ngModelOptions]="{standalone: true}" (keypress)="validateInput($event)"
+                 appThousandSeparator
+                 #price="ngModel" required
+                 (input)="formatCurrency()">
+          <span class="input-group-text">đ</span>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-5">
+        <label for="image" class="col-form-label">Hình ảnh</label>
+        <div class="input-group mb-3">
+          <input type="file" class="form-control" id="image" name="image"
+                 [(ngModel)]="product.image" [ngModelOptions]="{standalone: true}" #img="ngModel" required>
+          <label class="input-group-text" for="image">Upload</label>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-6">
+        <label class="col-form-label">Mặt hàng</label>
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="spec" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;">
+            {{ specName }}
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer">
+            <ng-container *ngFor="let s of specificationProducts">
+              <a class="dropdown-item" (click)="optionSpecChose(s.display)">{{ s.display }}</a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="mb-3 col-md-6">
+        <label for="category" class="col-form-label">Loại sản phẩm</label>
+        <div class="dropdown">
+          <input type="text" class="form-control" id="category" name="specification"
+                 [value]="cateName" hidden="true" [(ngModel)]="product.category"
+                 [ngModelOptions]="{standalone: true}" #category="ngModel" required>
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;">
+            {{ cateName }}
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer">
+            <ng-container *ngFor="let t of categoryProducts">
+              <a class="dropdown-item" (click)="cateChose(t.display)">{{ t.display }}</a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-6">
+        <label for="company" class="col-form-label">Công ty</label>
+        <input type="text" class="form-control" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               id="company"
+               [value]="companyName" [disabled]="true">
+      </div>
+
+      <div class="md-3 col-md-2">
+        <br><br>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="status1" value="option1" checked
+                 (click)="getStatusActive(displayProductStatus[0].value)">
+          <label class="form-check-label" for="status1">
+            {{ displayProductStatus[0].display }}
+          </label>
+        </div>
+      </div>
+
+      <div class="md-3 col-md-2">
+        <br><br>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="status2" value="option2"
+                 (click)="getStatusComingSoon(displayProductStatus[1].value)">
+          <label class="form-check-label" for="status2">
+            {{ displayProductStatus[1].display }}
+          </label>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="desc" class="form-label">Mô tả</label>
+        <textarea class="form-control" id="desc" name="desc" rows="3"
+                  [(ngModel)]="product.description" [ngModelOptions]="{standalone: true}"></textarea>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="validationCustom01">Size (Kích thước)</label>
+        <input type="text" class="form-control" id="validationCustom01" placeholder="" required
+               [value]="this.itemSize.optionProduct?.name" [hidden]="true">
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="SizeProduct"
+                  data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;">
+            <span class="caret">{{ this.sizeName }}</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right w-100 overflow-scroll" style="cursor: pointer">
+            <ng-container>
+              <button class="btn btn-primary btn-add-size">Thêm Size</button>
+            </ng-container>
+            <ng-container *ngFor="let o of optionSizes; let i = index">
+              <a class="dropdown-item" (click)="getOptionSizes(o.name!, i)">
+                {{ o.name }}
+              </a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5 mb-3">
+        <label for="validationCustom02">Giá phụ thu</label>
+        <input type="text" class="form-control" id="validationCustom02" placeholder=".000 đ" required
+               [(ngModel)]="itemSize.addition" [ngModelOptions]="{standalone: true}"
+               appThousandSeparator
+               (keypress)="validateInput($event)">
+      </div>
+
+
+      <div class="col-md-1 mb-3">
+        <br>
+        <button type="button" class="btn btn-primary"
+                [disabled]="(!itemSize.optionProduct?.name || !itemSize.addition)"
+                (click)="addSizeToTable()">Thêm
+        </button>
+      </div>
+
+      <div class="mb-3" *ngIf="showTableSize">
+        <div class="tb-size" style="height: 18vh; overflow: scroll">
+          <table class="table  table-bordered">
+            <thead>
+            <tr>
+              <th style="width: 4vw"></th>
+              <th scope="col">#</th>
+              <th scope="col">Tên Size</th>
+              <th scope="col">Giá phụ thu</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let s of sizes; let i = index">
+              <td>
+                <button class="btn btn-close" (click)="removeItemSize(i)"></button>
+              </td>
+              <td>{{ this.isQuantityTable + i }}</td>
+              <td>{{ s.optionProduct!.name }}</td>
+              <td>{{ s.addition | currency: 'VND' | slice:1 }}
+                <span class="symbol"
+                      style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-------------------------------    Dòng 2        --------------->
+
+      <div class="col-md-4 mb-3">
+        <label for="namecolor">Màu sắc</label>
+        <input type="text" class="form-control" id="namecolor" placeholder="" required
+               [value]="this.itemColor.optionProduct?.name" [hidden]="true">
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;">
+            <span class="caret">{{ this.colorName }}</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right w-100 overflow-scroll" style="cursor: pointer">
+            <ng-container>
+              <button class="btn btn-primary btn-add-color">Thêm màu sắc</button>
+            </ng-container>
+            <ng-container *ngFor="let o of optionColors; let i = index">
+              <a class="dropdown-item" (click)="getOptionColors(o.name!, i)">
+                {{ o.name }}
+              </a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2 mb-3">
+        <label for="feePriceColor">Giá phụ thu</label>
+        <input type="text" class="form-control" id="feePriceColor" placeholder=".000 đ" required
+               [(ngModel)]="itemColor.addition"
+               appThousandSeparator
+               (keypress)="validateInput($event)" [ngModelOptions]="{standalone: true}">
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+      </div>
+
+      <div class="col-md-5 mb-3">
+        <label for="nameColor">Update hinh ảnh</label>
+        <input type="file" class="form-control" id="colorImage" name="colorImage" style="width: 100%"
+               [(ngModel)]="itemColor.image" [ngModelOptions]="{standalone: true}" #ci="ngModel" required>
+
+      </div>
+      <div class="col-md-1 mb-1">
+        <br>
+        <button type="button" class="btn btn-primary"
+                [disabled]="(!itemColor.optionProduct?.name || !itemColor.addition) && !itemColor.image"
+                (click)="addColorToTable()">Thêm
+        </button>
+      </div>
+
+      <div class="mb-3" *ngIf="showTableColor">
+        <div class="tb-color" style="height: 18vh; overflow: scroll">
+          <table class="table table-lg table-bordered">
+            <thead>
+            <tr>
+              <th style="width: 4vw"></th>
+              <th scope="col">#</th>
+              <th scope="col">Tên Size</th>
+              <th scope="col">Giá phụ thu</th>
+              <th scope="col">Hình ảnh</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let c of colors; let i = index">
+              <td>
+                <button class="btn btn-close" (click)="removeItemColor(i)"></button>
+              </td>
+              <td>{{ this.isQuantityTable + i }}</td>
+              <td>{{ c.optionProduct?.name }}</td>
+              <td>{{ c.addition | currency: 'VND' | slice:1 }}
+                <span class="symbol"
+                      style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+              </td>
+              <td>{{ c.image }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <style>
+        .table th, .table td {
+          border-right: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+        }
+
+        .table th:last-child, .table td:last-child {
+          border-right: none;
+        }
+      </style>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addProduct()">{{ btnName[0].display }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+</app-modal-wrapper>

@@ -1,0 +1,7 @@
+export enum BillStatus {
+  BOOKING = "BOOKING",
+  SHIPPING = "SHIPPING",
+  CHECKED = "CHECKED",
+  CANCELLED = "CANCELLED",
+  COMPELETED = "COMPELETED",
+}

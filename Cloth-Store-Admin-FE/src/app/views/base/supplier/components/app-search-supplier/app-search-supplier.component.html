@@ -1,0 +1,35 @@
+<app-modal-wrapper #searchWrapper
+                   [showModal]="isSeachChose"
+                   [modalTitle]="'Tìm nhà cung cấp'"
+                   [nameButton]="'Tìm kiếm'"
+                   (closeModalEvent)="closeModal()">
+
+  <!-- Your modal content goes here -->
+  <div class="modal-body">
+    <form class="row g-3">
+      <div class="mb-3 col-md-6">
+        <label for="suppliertCode" class="col-form-label">Code</label>
+        <input type="text" class="form-control" id="suppliertCode" [(ngModel)]="supplierCode"
+               [ngModelOptions]="{standalone: true}" #ci="ngModel" required>
+
+      </div>
+      <div class="mb-3 col-md-6">
+        <label for="supplierName" class="col-form-label">Tên nhà cung cấp</label>
+        <input type="text" class="form-control" id="supplierName" [(ngModel)]="supplierName "
+               [ngModelOptions]="{standalone: true}" #ci="ngModel" required>
+      </div>
+      <div class="mb-3">
+        <label for="supplierPhone" class="col-form-label">Số điện thoại</label>
+        <input type="text" class="form-control" id="supplierPhone" [(ngModel)]="supplierPhone "
+               [ngModelOptions]="{standalone: true}" #ci="ngModel" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="loadSupplierFirst()">Load all</button>
+
+        <button type="button" class="btn btn-primary" (click)="btnSeach(supplier)">Search
+        </button>
+      </div>
+    </form>
+  </div>
+</app-modal-wrapper>

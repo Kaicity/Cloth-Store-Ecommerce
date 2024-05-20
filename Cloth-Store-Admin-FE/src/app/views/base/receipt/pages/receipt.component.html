@@ -1,0 +1,125 @@
+<app-spinner [isLoading]="isShowLoading"></app-spinner>
+<!-- Content Header (Page header) -->
+<ng-container class="container-header">
+  <div class="container-title" style="margin-left: 0.5vw">
+    <h1 i18n="@@employees-title">Phiếu thu</h1>
+  </div>
+</ng-container>
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 71vw">
+    <div class="col-auto">
+      <c-breadcrumb>
+        <c-breadcrumb-item url="#">Trang chủ</c-breadcrumb-item>
+        <c-breadcrumb-item [active]="true">Phiếu thu</c-breadcrumb-item>
+      </c-breadcrumb>
+    </div>
+  </div>
+</ng-container>
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 69.5vw">
+    <div class="col-auto d-flex justify-content-between">
+      <div class="col-auto">
+        <button type="button" class="btn btn-info" style="height: 4vh; width: 2.5vw"
+                (click)="showSeachForm()">
+          <img src="assets/images/seach.png" class="icon-search" style="width: 1vw; height: 2vh">
+        </button>
+        <button class="btn bg-warning" (click)="showInsertForm()" style="margin-left: 0.4vw">
+          Thêm Phiếu thu
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-1" style="width: 10vw; max-width: 100%">
+    <button class="btn btn-outline btn-custom-exl" (click)="exportDataToExcels()">
+      Xuất File Excel
+    </button>
+  </div>
+</ng-container>
+<br>
+<ng-container *ngIf="receipts.length != 0">
+  <app-data-table [columnNumber]="7" [tableFormatClass]="tableFormat" [search]="receiptSearch"
+                  [data2Show]="receipts">
+    <table class="{{tableFormat}}">
+      <thead>
+      <tr>
+        <th>Code</th>
+        <th>Loại Phiếu thu</th>
+        <th>Tổng Cộng</th>
+        <th>Ngày Tạo</th>
+        <th>Ngày Cập Nhật</th>
+        <th>Tình Trạng</th>
+        <th>Ghi chú</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let r of receipts;">
+        <td>{{ r.receipt!.code }}</td>
+        <td>{{ r.receipt!.typePaymentReceipt?.name }}</td>
+        <td>{{ r.receipt!.total| currency: 'VND' | slice:1 }}
+          <span class="symbol"
+                style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+        </td>
+        <td>{{ r.receipt!.dateCreated | date : 'dd/MM/YYYY, h:mm a'}}</td>
+        <td>{{ r.receipt!.dateUpdated | date : 'dd/MM/YYYY, h:mm a'}}</td>
+        <td>{{ r.receipt!.status }}</td>
+        <td>{{ r.receipt!.note }}</td>
+        <td style="width: 4.5vw">
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-dropdown" (click)="getReceiptData(r.receipt?.id!, r)">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="updateReceipt()">
+        <mat-icon>edit</mat-icon>
+        <span>Sửa</span>
+      </button>
+
+      <button mat-menu-item (click)="deleteReceipt()">
+        <mat-icon>delete</mat-icon>
+        <span>Xóa</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>list</mat-icon>
+        <span>D.Sách HH - VT</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>print</mat-icon>
+        <span>In</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>Excel</mat-icon>
+        <span>Xuất File Excel</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Lập p.receipt!Chi</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Tạo Từ Phiếu Này</span>
+      </button>
+    </mat-menu>
+  </app-data-table>
+</ng-container>
+
+<app-add-receipt #AddWrapper
+                 [optionTypeReceipt]="typeName"
+                 [btnName]="isBtnName"
+                 [receipt]="receiptInformation"
+                 [receiptTransactions]="receiptTransactionInformation"
+                 [receiptStatus]="reiStatus"
+                 [showTableSize]="receiptTransactionInformation.length != 0"
+                 [typePaymentReceiptName]="receiptInformation.typePaymentReceipt?.name!"></app-add-receipt>
+<app-search-receipt #searchWrapper></app-search-receipt>
+
+

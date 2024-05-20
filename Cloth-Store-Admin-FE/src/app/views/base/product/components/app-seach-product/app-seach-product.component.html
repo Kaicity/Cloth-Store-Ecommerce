@@ -1,0 +1,47 @@
+<app-modal-wrapper #searchWrapper
+                   [showModal]="isSeachChose"
+                   [modalTitle]="'Tìm sản phẩm'"
+                   [nameButton]="'Tìm kiếm'"
+                   (closeModalEvent)="closeModal()">
+
+  <!-- Your modal content goes here -->
+  <div class="modal-body">
+    <form class="row g-3">
+      <div class="mb-3 col-md-6">
+
+        <label class="col-form-label">Giá tiền</label>
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;">
+            {{ priceDisplayOption }}
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer">
+            <ng-container *ngFor="let optionPrice of optionPriceDefault">
+              <a class="dropdown-item" (click)="getOptionValuePrice(optionPrice)">{{ optionPrice.display }}</a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-6">
+        <label for="productCode" class="col-form-label">Code</label>
+        <input type="text" class="form-control" id="productCode" [(ngModel)]="productCode"
+               [ngModelOptions]="{standalone: true}" #ci="ngModel" required>
+
+      </div>
+      <div class="mb-3">
+        <label for="productName" class="col-form-label">Tên sản phẩm</label>
+        <input type="text" class="form-control" id="productName" [(ngModel)]="productName "
+               [ngModelOptions]="{standalone: true}" #ci="ngModel" required>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="loadProductFirst()">Load all</button>
+        <button type="button" class="btn btn-primary" (click)="btnSeach(products)">Search
+        </button>
+      </div>
+    </form>
+  </div>
+</app-modal-wrapper>

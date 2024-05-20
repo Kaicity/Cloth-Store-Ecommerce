@@ -1,0 +1,58 @@
+<app-modal-wrapper #AddWrapper
+[showModal]="isInsertChose"
+[modalTitle]="'Thêm Nhà Cung Cấp'"
+[nameButton]="'Thêm'"
+[size]="'width: 65%; max-width: 100%;'"
+(closeModalEvent)="closeModal()" xmlns="http://www.w3.org/1999/html">
+
+  <!-- Your modal content goes here -->
+  <div class=".modal-lg">
+    <form #myForm="ngForm" class="row g-3" (ngSubmit)="onSubmit()">
+      <div class="mb-3 col-md-4">
+        <label for="fullname" class="col-form-label">Tên Nhà Cung Cấp</label>
+        <input type="text" class="form-control" id="fullname" name="productName"
+               [(ngModel)]="supplierModel.name" [ngModelOptions]="{standalone: true}" #img="ngModel" required>
+      </div>
+
+      <div class="mb-3 col-md-4">
+        <label for="Phone" class="col-form-label">Số Điện thoaại</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="Phone" name="price"
+                 [(ngModel)]="supplierModel.phone" [ngModelOptions]="{standalone: true}" #img="ngModel" required>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-4">
+        <label for="address" class="col-form-label">Địa Chỉ</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="address" name="price"
+                 [(ngModel)]="supplierModel.address" [ngModelOptions]="{standalone: true}" #img="ngModel" required>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-2">
+        <label class="col-form-label">Trạng Thái</label>
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="spec" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;">
+            {{ status || statusDisplay }} <!-- Sử dụng placeholder hoặc genderDisplay nếu placeholder không tồn tại -->
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer">
+            <ng-container *ngFor="let s of specificationStatus">
+              <a class="dropdown-item" (click)="optionSpecChose(s.display)">{{ s.display }}</a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addOrUpdateFunc()">{{ btnName[0].display }}</button>
+      </div>
+      <!-------------------------------    Dòng 2        --------------->
+    </form>
+  </div>
+
+</app-modal-wrapper>

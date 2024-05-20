@@ -1,0 +1,206 @@
+<app-modal-wrapper #AddWrapper
+                   [showModal]="isInsertChose"
+                   [modalTitle]="'Thêm phiếu nhập'"
+                   [nameButton]="'Lưu '"
+                   [size]="'width: 65%; max-width: 100%;'"
+                   (closeModalEvent)="closeModal()" xmlns="http://www.w3.org/1999/html">
+
+  <!-- Your modal content goes here -->
+  <div class=".modal-lg">
+    <form #myForm="ngForm" class="row g-3" (ngSubmit)="onSubmit()">
+
+      <div class="mb-3" style="width: 100%">
+        <input type="datetime-local" class="form-control" [(ngModel)]="importing.dateCreated"
+               [ngModelOptions]="{standalone: true}" >
+
+      </div>
+
+      <div class="mb-3 col-md-4">
+        <label for="CT" class="col-form-label">Mã CT</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="CT" name="per" readonly="true">
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-4">
+        <label for="SCT" class="col-form-label">Số CT</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="SCT" name="per" readonly="true" >
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-4">
+        <label for="agencyID" class="col-form-label">Mã đại lý</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="agencyID" name="per"
+                 [ngModel]="importing.agency?.code" [ngModelOptions]="{standalone: true}" [disabled]="true"
+                 [value]="importing.agency?.code" [placeholder]="agencyCode">
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-6">
+        <label for="agencyName" class="col-form-label">Tên đại lý</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="agencyName" name="per"
+                 [ngModel]="importing.agency?.name" [disabled]="true" [ngModelOptions]="{standalone: true}"
+                 [value]="importing.agency?.name" [placeholder]="agencyName">
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <br>
+        <label>Nhà cung cấp</label>
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="SizeProduct"
+                  data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;">
+            <span class="caret">{{ this.supplierNameDisplay }}</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right w-100 overflow-scroll" style="cursor: pointer">
+            <ng-container *ngFor="let o of suppliers; let i = index">
+              <a class="dropdown-item" (click)="getOptionType(o.name!, i, o)">
+                {{ o.name }}
+              </a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-6">
+        <label for="price" class="col-form-label">Tổng cộng</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="price" name="price"
+                 [(ngModel)]="importing.total" [ngModelOptions]="{standalone: true}" appThousandSeparator
+                 (keypress)="validateInput($event)"
+                 #price="ngModel" required
+                 (input)="formatCurrency()">
+
+          <span class="input-group-text">đ</span>
+        </div>
+      </div>
+
+      <div class="md-3 col-md-2">
+        <br><br>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="status1"
+                 value="{{ displayImporting[0].value }}"
+                 [checked]="importingStatus == ImportingStatus.COMPLETE"
+                 (click)="getStatusOnline(displayImporting[0].value)">
+          <label class="form-check-label" for="status1">
+            {{ displayImporting[0].display }}
+          </label>
+        </div>
+      </div>
+
+      <div class="md-3 col-md-2">
+        <br><br>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="exampleRadios" id="status2"
+                 value="{{ displayImporting[1].value }}"
+                 [checked]="importingStatus == ImportingStatus.UNCOMPLETE"
+                 (click)="getStatusDemo(displayImporting[1].value)">
+          <label class="form-check-label" for="status2">
+            {{ displayImporting[1].display }}
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-3 mb-3">
+        <label for="quantity">Sản phẩm</label>
+        <input type="text" class="form-control" (focus)="toggleDropdown()"
+               [value]="productNameDisplay" placeholder="Lọc sản phẩm" [(ngModel)]="searchTerm"
+               [ngModelOptions]="{standalone: true}"
+               (input)="filterProducts()">
+
+        <div class="dropdownProduct" [ngClass]="{'show': showDropdown}">
+          <div class="float-none">
+            <h2 style="display: inline;">Tổng sản phẩm hiển thị: {{ productFill.length }}</h2>
+            <a style="cursor: pointer; font-size: 25px; display: inline-block; margin-left: 20vw" (click)="closeAddProduct()">x</a>
+          </div>
+          <div *ngFor="let p of productFill">
+            <div class="flex-row" (click)="selectOption(p)">
+              <img [src]="p.image" alt="image" class="product-image">
+              <span style="margin-left: 1vw">{{ p.code }}</span>
+              <span style="margin-left: 1vw">{{ p.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label for="quantity">Số lượng</label>
+        <input type="text" class="form-control" id="quantity" required [(ngModel)]="importingTransaction.quantity"
+               [ngModelOptions]="{standalone: true}" #qty="ngModel" (keypress)="validateInput($event)">
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label for="thisprice">Giá</label>
+        <input type="text" class="form-control" id="thisprice" placeholder=".000 đ" required
+               [(ngModel)]="importingTransaction.price" appThousandSeparator
+               [ngModelOptions]="{standalone: true}" #price="ngModel"
+               (keypress)="validateInput($event)"
+        >
+      </div>
+
+      <div class="col-md-1 mb-3">
+        <br>
+        <button type="button" class="btn btn-primary"
+                (click)="addProductToTable()"
+                [disabled]="!importingTransaction.quantity || !importingTransaction.price || !productNameDisplay">
+          Thêm
+        </button>
+      </div>
+
+      <div class="mb-3" *ngIf="showTableSize">
+        <div class="tb-size" style="height: 20vh; overflow: scroll">
+          <table class="table table-lg table-bordered">
+            <thead>
+            <tr>
+              <th style="width: 4vw"></th>
+              <th scope="col">#</th>
+              <th scope="col">Tên sản phẩm</th>
+              <th scope="col">Số lượng</th>
+              <th scope="col">Đơn giá</th>
+              <th scope="col">Thành tiền</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let s of importingTransactions; let i = index">
+              <td>
+                <button class="btn btn-close" (click)="removeItemImportingTransaction(i)"></button>
+              </td>
+              <td>{{ no + i }}</td>
+              <td>{{ s.product?.name }}</td>
+              <td class="quantity">
+                <div class="quantity-controls">
+                  <a (click)="decrementQuantity(i)">-</a>
+                  <span [hidden]="s.quantity! >= 10">0</span>
+                  {{ s.quantity }}
+                  <a (click)="incrementQuantity(i)">+</a>
+                </div>
+              </td>
+              <td>{{ s.price | currency: 'VND' | slice:1 }}
+                <span class="symbol"
+                      style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+              </td>
+              <td>{{ s.amount | currency: 'VND' | slice:1 }}
+                <span class="symbol"
+                      style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addImporting()">{{ btnName[0].display }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+</app-modal-wrapper>
+

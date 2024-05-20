@@ -1,0 +1,80 @@
+<div style=" margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;" class="container-fluid">
+
+  <div id="row1">
+    <c-widget-stat-e [title]="'Đơn đặt hàng mới'" style="width: 15vw;"
+                     [value]="'Số lượng: ' + this.bookingBills.length"
+                     class="mb-4">
+    </c-widget-stat-e>
+    <div *ngFor="let bill of this.bookingBills" class="widget-order">
+      <br>
+      <br>
+      <button (click)="test2(bill)">{{ 'Đơn hàng mã số: ' + bill.exportingBill?.code }}
+        <br> Tổng giá tiền: {{ bill.exportingBill?.total | currency: 'VND' | slice:1 }}
+        <span class="symbol"
+              style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="row2">
+    <c-widget-stat-e [title]="'Đơn đã duyệt'" style="width: 15vw"
+                     [value]="'Số lượng: ' + this.checkedBills.length"
+                     class="mb-4">
+    </c-widget-stat-e>
+    <div *ngFor="let bill of this.checkedBills">
+      <br>
+      <br>
+      <button style="width: 15vw;" (click)="showInsertForm()">{{ 'Đơn hàng mã số: ' + bill.exportingBill?.code }}
+        <br> {{ 'Tổng giá tiền:' + bill.exportingBill?.total }}
+      </button>
+    </div>
+  </div>
+
+  <div id="row3">
+    <c-widget-stat-e [title]="'Đơn đang giao hàng'" style="width: 15vw"
+                     [value]="'Số lượng: ' + this.shippingBills.length"
+                     class="mb-4">
+    </c-widget-stat-e>
+    <div *ngFor="let bill of this.shippingBills">
+      <br>
+      <br>
+      <button style="width: 15vw;" (click)="showInsertForm()">{{ 'Đơn hàng mã số: ' + bill.exportingBill?.code }}
+        <br> {{ 'Tổng giá tiền:' + bill.exportingBill?.total }}
+      </button>
+    </div>
+  </div>
+
+  <div id="row4">
+    <c-widget-stat-e [title]="'Đơn đã hoàn thành'" style="width: 15vw"
+                     [value]="'Số lượng: ' + this.completedBills.length"
+                     class="mb-4">
+    </c-widget-stat-e>
+    <div *ngFor="let bill of this.completedBills">
+      <br>
+      <br>
+      <button style="width: 15vw;" (click)="showInsertForm()">{{ 'Đơn hàng mã số: ' + bill.exportingBill?.code }}
+        <br> {{ 'Tổng giá tiền:' + bill.exportingBill?.total }}
+      </button>
+    </div>
+  </div>
+
+  <div id="row5">
+    <c-widget-stat-e [title]="'Đơn đã hủy'" style="width: 15vw"
+                     [value]="'Số lượng: ' + this.cancelledBills.length"
+                     class="mb-4">
+    </c-widget-stat-e>
+    <div *ngFor="let bill of this.cancelledBills">
+      <br>
+      <br>
+      <button style="width: 15vw;" (click)="showInsertForm()">{{ 'Đơn hàng mã số: ' + bill.exportingBill?.code }}
+        <br> {{ 'Tổng giá tiền:' + bill.exportingBill?.total }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-show-detail-bill #AddWrapper></app-show-detail-bill>

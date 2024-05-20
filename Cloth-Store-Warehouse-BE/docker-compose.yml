@@ -1,0 +1,21 @@
+version: '2.1'
+
+services:
+  clothstoreclient1:
+    image: clothstoreclient
+    build: .
+    ports:
+      - 4201:4201
+    restart: always
+  ct_warehouse_container1:
+    image: warehousedb
+    build: .
+    ports:
+      - 3307:3306
+    restart: always
+  warehousebe1:
+    image: warehousebe
+    build: .
+    ports:
+      - 5556:5556
+

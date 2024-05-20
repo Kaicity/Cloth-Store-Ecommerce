@@ -1,0 +1,86 @@
+.dropdownProduct {
+  position: relative;
+  left: 0;
+  margin-top: 2vh;
+  width: 36vw;
+  height: 25vh;
+  z-index: 1;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: none;
+  overflow: scroll;
+}
+
+.col-md-3 .dropdownProduct.show {
+  display: block;
+}
+
+.dropdownProduct div {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+}
+
+.dropdownProduct div:last-child {
+  border-bottom: none;
+}
+
+.dropdownProduct div:hover {
+  background-color: lightgray;
+}
+.product-image {
+  width: 50px; /* Đảm bảo kích thước hình ảnh không bị biến đổi */
+  height: 50px;
+  margin-right: 10px; /* Khoảng cách giữa hình ảnh và tiêu đề */
+}
+
+
+/* CSS cho các nút + và - */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-controls a {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 15%;
+  background-color: #5141e0; /* Màu sắc có thể điều chỉnh */
+  color: #fff; /* Màu sắc chữ */
+  text-align: center;
+  line-height: 25px;
+  cursor: pointer;
+  margin: 0 5px; /* Khoảng cách giữa các nút */
+}
+
+.quantity-controls a:hover {
+  background-color: #0056b3; /* Màu sắc hover có thể điều chỉnh */
+}
+
+/* CSS để căn giữa nút số lượng */
+.quantity {
+  align-items: center;
+}
+
+.quantity a:first-child {
+  margin-right: 5px;
+}
+
+.table-bordered {
+  border-spacing: 0;
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid #000; /* Màu đen */
+}
+
+
+
+
+
+

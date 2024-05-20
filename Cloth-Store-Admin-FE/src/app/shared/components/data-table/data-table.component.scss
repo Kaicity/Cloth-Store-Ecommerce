@@ -1,0 +1,35 @@
+:host ::ng-deep table {
+  max-width: 100%;
+  width: 80vw;
+  height: auto;
+  background-color: #fff;
+  margin-left: 0.5vw;
+  border-collapse: collapse;
+}
+
+:host ::ng-deep thead {
+  font-weight: normal;
+  text-align: left;
+}
+:host ::ng-deep th {
+  border-right: 1px solid #fff;
+  color: #000000;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+:host ::ng-deep td {
+  width: auto;
+  border-right: 1px solid #d8dbe0;
+  padding-left: 16px;
+  font-size: 16px;
+  text-align: left;
+}
+
+
+
+
+
+
+
+

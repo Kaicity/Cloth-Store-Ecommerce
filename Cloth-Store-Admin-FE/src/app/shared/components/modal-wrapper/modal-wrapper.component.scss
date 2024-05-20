@@ -1,0 +1,29 @@
+.modal {
+  display: none;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.modal.show {
+  display: block;
+}
+
+.modal-dialog {
+  max-width: 600px;
+  margin: 30px auto;
+  top: 60px;
+}
+
+.modal-content {
+  border-radius: 10px;
+}
+
+.modal-header {
+  background-color: #5141e0;
+  color: white;
+}
+
+.modal-footer {
+  background-color: #f1f1f1;
+}
+

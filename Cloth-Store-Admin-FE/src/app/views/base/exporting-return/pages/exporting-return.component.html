@@ -1,0 +1,159 @@
+<app-spinner [isLoading]="isShowLoading"></app-spinner>
+<!-- Content Header (Page header) -->
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 68vw">
+    <div class="col-auto d-flex">
+      <c-breadcrumb>
+        <c-breadcrumb-item url="#">Trang chủ</c-breadcrumb-item>
+        <c-breadcrumb-item [active]="true">Phiếu xuất trả</c-breadcrumb-item>
+      </c-breadcrumb>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 0.1vw">
+    <div class="col-auto d-flex justify-content-between align-items-center">
+      <div class="container-title">
+        <h1>Danh sách phiếu xuất trả</h1>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<ng-container class="container-header">
+  <div class="row">
+    <div class="col-md-4" style="margin-left: 0.5vw">
+      <div class="input-group">
+        <input type="search" class="form-control search-icon" aria-label="Search content" (input)="filterExportingReturn()"
+               [(ngModel)]="searchTermTable"
+               [ngModelOptions]="{standalone: true}"
+               placeholder="Tìm kiếm phiếu theo mã phiếu nhập, tên nhà cung cấp,mã phiếu xuất trả" id="search" name="per">
+        <span class="input-group-text"><img src="assets/images/seach.png" class="icon-search"
+                                            style="width: 1vw; height: 2vh"></span>
+      </div>
+    </div>
+
+    <div class="col-md-1" style="width: 10vw; max-width: 100%">
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterStatus"
+                data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false"
+                style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center; background-color: white">
+          <span class="caret">{{ isFillStatus }}</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right w-100 overflow-scroll" style="cursor: pointer">
+          <ng-container *ngFor="let f of displayExportingReturnFilter; let i = index">
+            <a class="dropdown-item" (click)="getFilterStatus(f.value, f.display)">
+              {{ f.display }}
+            </a>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <button class="btn btn-outline btn-custom-exl" (click)="exportDataToExcels()">
+        Xuất File Excel
+      </button>
+    </div>
+  </div>
+  <p></p>
+</ng-container>
+
+
+<ng-container *ngIf="exportingReturns.length !== 0">
+  <app-data-table [columnNumber]="7" [tableFormatClass]="tableFormat" [search]="exportingReturnSearch"
+                  [data2Show]="exportingReturns">
+    <table class="{{tableFormat}}">
+      <thead>
+      <tr>
+        <th>Code phiếu nhập</th>
+        <th>Ngày trả hàng</th>
+        <th>Code phiếu trả</th>
+        <th>Tên nhà cung cấp</th>
+        <th>Tình trạng</th>
+        <th>Ngày đặt hàng</th>
+        <th>Tiền hàng</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let i of exportingReturnFill;">
+        <td>{{ i.exportingReturnBill!.importing?.code }}</td>
+        <td>{{ i.exportingReturnBill!.dateCreated | date : 'dd/MM/YYYY, h:mm a'}}</td>
+        <td>{{ i.exportingReturnBill!.code }}</td>
+        <td>{{ i.exportingReturnBill!.supplier?.name }}</td>
+        <td>
+          <span *ngIf="i.exportingReturnBill?.status === 'COMPLETE'" class="dot-green"></span>
+          <span *ngIf="i.exportingReturnBill?.status === 'UNCOMPLETE'" class="dot-red"></span>
+          {{ getStatusOfExportingReturn(i.exportingReturnBill!.status!) }}
+        </td>
+
+        <td>{{ i.exportingReturnBill!.dateUpdated | date : 'dd/MM/YYYY, h:mm a'}}</td>
+        <td>{{ i.exportingReturnBill!.total | currency: 'VND' | slice:1 }}
+          <span class="symbol"
+                style="font-size: 1rem; line-height: 1rem; letter-spacing: 0.1rem; text-decoration: underline">đ</span>
+        </td>
+        <td style="width: 4.5vw">
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-dropdown"
+                  (click)="getExportingReturnData(i.exportingReturnBill?.id!, i)">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="updateExportingReturn()">
+        <mat-icon>edit</mat-icon>
+        <span>Sửa</span>
+      </button>
+
+      <button mat-menu-item (click)="deleteExportingReturn()">
+        <mat-icon>delete</mat-icon>
+        <span>Xóa</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>list</mat-icon>
+        <span>D.Sách HH - VT</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>print</mat-icon>
+        <span>In</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>Excel</mat-icon>
+        <span>Xuất File Excel</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Lập P.Chi</span>
+      </button>
+
+      <button mat-menu-item >
+        <mat-icon>money</mat-icon>
+        <span>Tạo Từ Phiếu Này</span>
+      </button>
+    </mat-menu>
+  </app-data-table>
+</ng-container>
+
+<app-add-exporting-return #AddWrapper
+                   [suppliers]="supplierName"
+                   [btnName]="isBtnName"
+                   [exportingReturn]="exportingReturnInformation"
+                   [ExportingReturnTransactions]="exportingReturnTransactionInformation"
+                   [exportingReturnStatus]="statusValue"
+                   [showTableSize]="exportingReturnTransactionInformation.length != 0"
+                   [supplierNameDisplay]="exportingReturnInformation.supplier?.name!"
+                   [products]="productsName"
+                   [productFill]="products"></app-add-exporting-return>
+
+<app-search-exporting-return #searchWrapper></app-search-exporting-return>

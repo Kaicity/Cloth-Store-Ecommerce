@@ -1,0 +1,114 @@
+<app-spinner [isLoading]="isShowLoading"></app-spinner>
+<!-- Content Header (Page header) -->
+<ng-container class="container-header">
+  <div class="container-title" style="margin-left: 0.5vw">
+    <h1 i18n="@@employees-title">Nhà cung cấp</h1>
+  </div>
+</ng-container>
+
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 68vw">
+    <div class="col-auto">
+      <c-breadcrumb>
+        <c-breadcrumb-item url="#">Trang chủ</c-breadcrumb-item>
+        <c-breadcrumb-item [active]="true">Nhà cung cấp</c-breadcrumb-item>
+      </c-breadcrumb>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container class="container-header">
+  <div class="row" style="margin-left: 68vw">
+    <div class="col-auto d-flex justify-content-between">
+      <div class="col-auto">
+        <button type="button" class="btn btn-info" style="height: 4vh; width: 2.5vw">
+          <img src="assets/images/seach.png" class="icon-search" style="width: 1vw; height: 2vh" (click)="showSeachForm()">
+        </button>
+        <button class="btn bg-warning" (click)="showInsertForm()" style="margin-left: 0.4vw">
+          Thêm nhà cung cấp
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<br>
+
+<ng-container *ngIf="supplierList.length !== 0">
+  <app-data-table [columnNumber]="7" [tableFormatClass]="tableFormat" [search]="search"
+                  [data2Show]="supplierList">
+    <table class="{{tableFormat}}">
+      <thead>
+      <tr>
+        <th>Code</th>
+        <th>Tên</th>
+        <th>Số điện thoại</th>
+        <th>Địa chỉ</th>
+        <th>Trạng Thái</th>
+        <th>Ngày Tạo</th>
+        <th>Ngày Cập Nhật</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let p of supplierList;">
+        <td>{{ p.code }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.phone }}</td>
+        <td>{{ p.address }}</td>
+        <td>{{ getStatusOfSupplier(p?.status!) }}</td>
+        <td>{{ p.dateCreate | date : 'dd/MM/YYYY, h:mm a'}}</td>
+        <td>{{ p.dateUpdate | date : 'dd/MM/YYYY, h:mm a'}}</td>
+        <td style="width: 4.5vw">
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-dropdown"(click)="getSupplierData(p.id!,p)" >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="updateSupplier()" >
+        <mat-icon>edit</mat-icon>
+        <span>Sửa</span>
+      </button>
+
+      <button mat-menu-item (click)="deleteProduct()">
+        <mat-icon>delete</mat-icon>
+        <span>Xóa</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>list</mat-icon>
+        <span>D.Sách HH - VT</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>print</mat-icon>
+        <span>In</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>Excel</mat-icon>
+        <span>Xuất File Excel</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Lập P.Chi</span>
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>money</mat-icon>
+        <span>Tạo Từ Phiếu Này</span>
+      </button>
+
+    </mat-menu>
+  </app-data-table>
+</ng-container>
+
+<app-search-supplier #searchWrapper (dataSupplierIsSeach)="receiveDataFromChildSeach($event)" ></app-search-supplier>
+<app-add-supplier #AddWrapper [btnName]="isBtnName" [supplierModel]="supplierInformation"  [statusDisplay]="statusValue"></app-add-supplier>
+
+
+

@@ -1,0 +1,22 @@
+.login-container {
+  position: absolute;
+  max-width: 25vw;
+  margin-left: 36vw;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 28vh;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  width: 100%;
+}
+@media only screen and (max-width: 768px) {
+  .login-container {
+    max-width: 90%;
+  }
+}
+

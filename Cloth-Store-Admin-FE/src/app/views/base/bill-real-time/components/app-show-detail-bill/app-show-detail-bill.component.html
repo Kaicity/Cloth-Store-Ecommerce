@@ -1,0 +1,103 @@
+<app-modal-wrapper #AddWrapper
+                   [showModal]="isInsertChose"
+                   [modalTitle]="'Chi tiết đơn hàng'"
+                   [nameButton]="'Thêm'"
+                   [size]="'width: 65%; max-width: 100%;'"
+                   (closeModalEvent)="closeModal()" xmlns="http://www.w3.org/1999/html">
+
+  <div class=".modal-lg">
+    <form class="row g-3" (ngSubmit)="onSubmit()">
+      <div class="mb-3 col-md-2">
+        <label for="name" class="col-form-label">Mã đơn hàng</label>
+        <input type="text" class="form-control" id="code" name="code" disabled [value]="bill.exportingBill?.code">
+      </div>
+
+      <div class="mb-3 col-md-3">
+        <label for="price" class="col-form-label">Tổng tiền</label>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-label="Dollar amount" id="price" name="price"
+                 [value]="bill.exportingBill?.total">
+          <span class="input-group-text">.000</span>
+          <span class="input-group-text">đ</span>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-3">
+        <label class="col-form-label">Trạng thái</label>
+        <div class="dropdown">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="spec" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"
+                  style="width: 100%; height: 4vh; display: flex; justify-content: space-between; align-items: center;">
+            {{ status }}
+            <span class="caret"></span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer">
+            <ng-container *ngFor="let s of statusBill, let i = index">
+              <a class="dropdown-item" (click)="statusChange(i)">{{ s.name }}</a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 col-md-4">
+        <label for="name" class="col-form-label">Tên khách hàng</label>
+        <input type="text" class="form-control" id="name" name="name" disabled>
+      </div>
+
+
+      <div class="mb-3 col-md-6">
+        <label class="col-form-label">Ngày Tạo</label>
+        <input type="text" class="form-control" id="DateCreated" name="DateCreated" [value]="currentDateTime"
+               disabled>
+      </div>
+
+
+      <div class="mb-3 col-md-6">
+        <label class="col-form-label">Ngày Xuất</label>
+        <input type="text" class="form-control" id="DateExport" name="DateExport">
+      </div>
+
+      <div class="mb-3">
+        <div class="tb-color" style="height: 16vh; overflow: scroll">
+          <table class="table table-sm">
+            <thead>
+            <tr>
+              <th style="width: 4vw"></th>
+              <th scope="col">Stt</th>
+              <th scope="col">Hình ảnh</th>
+              <th scope="col">Tên sản phẩm</th>
+              <th scope="col">Size</th>
+              <th scope="col">color</th>
+              <th scope="col">tổng giá</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let detail of bill?.exportingBillTransactions; let i = index">
+              <td>
+                <!--                                (click)="removeItemColor(i)"-->
+                <button class="btn btn-close"></button>
+              </td>
+              <td>{{ detail.bill?.code }}</td>
+              <td>{{ detail.product }}</td>
+              <td>{{ detail.product?.name }}</td>
+              <td>{{ 'chua lam' }}</td>
+              <td>{{ 'chua lam' }}</td>
+              <td>{{ '???' }}</td>
+            </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+        <button type="button" class="btn btn-primary">Thêm</button>
+      </div>
+
+    </form>
+  </div>
+</app-modal-wrapper>
+
+
+
