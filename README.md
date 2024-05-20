@@ -1,4 +1,4 @@
-# Clone 4 projects to your device
+# Describes instructions for installing and running the project
 - Create new folder
 - Open terminal at folder Run `$git clone https://github.com/Kaicity/Cloth-Store-Ecommerce.git`
 - After clone is finished use IDE Intelliji open 4 projects:
