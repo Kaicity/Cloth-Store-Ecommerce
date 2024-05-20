@@ -21,10 +21,5 @@
 - Once configured, you need to open a terminal and cd to the package containing docker-compose
 - Use "docker-compose up" command to use docker-compose
 
-## Config application.properties in module ct_start/src/resources
-
-## Deloyment Docker
-
-## Image Demo
 
 
