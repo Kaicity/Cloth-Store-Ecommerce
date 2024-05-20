@@ -19,6 +19,7 @@ Build image for this : " docker build -t clientfe . "
 Create Container from image : " docker run -p 4201:4201 --name client clientfe "
 
 ## Start run project
+Run `npm run install` when run project first time in message bottom right.
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4201/`. The application will run project from your local.
 
