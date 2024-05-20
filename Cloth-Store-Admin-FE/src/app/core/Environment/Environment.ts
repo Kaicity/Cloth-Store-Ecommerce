@@ -1,6 +1,6 @@
 export const environment ={
-  agencyBaseUrl :'http://clothstoreagencybe-env.eba-2mdmfynr.ap-southeast-2.elasticbeanstalk.com',
-  warehouseBaseUrl :'http://ClothstoreWarehouseBE-env.eba-r2mp4h4k.ap-southeast-2.elasticbeanstalk.com',
+  agencyBaseUrl :'http://localhost:5555',
+  warehouseBaseUrl :'http://localhost:5556',
 }
 
 

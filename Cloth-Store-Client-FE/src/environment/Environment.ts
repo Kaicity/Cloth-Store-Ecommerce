@@ -1,4 +1,4 @@
 export const environment ={
-  agencyBaseUrl :'https://agencybe-gfhhfhrxpa-as.a.run.app',
-  warehouseBaseUrl :'https://warehousebe-gfhhfhrxpa-as.a.run.app',
+  agencyBaseUrl :'http://localhost:5555',
+  warehouseBaseUrl :'http://localhost:5556',
 }
