@@ -4,9 +4,9 @@
 - Once done, you need to check in docker-compose to see if the image name configuration is the same as the name you built the image with
 - Here is an example:
   
-  warehousedb:
-    image: warehouse \\
-    ports:\\
+  //warehousedb:
+    //image: warehouse 
+    ports:
       - 3307:3306
     restart: always
   
