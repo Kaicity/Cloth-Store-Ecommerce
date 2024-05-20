@@ -16,6 +16,7 @@ Build image for this : " docker build -t ctadfe . "
 Create Container from image : " docker run -p 4202:4202 --name ctad ctadfe "
 
 ## Start run project
+Run `npm run install` when run project first time in message bottom right.
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4202/`. The application will run project from your local.
 
