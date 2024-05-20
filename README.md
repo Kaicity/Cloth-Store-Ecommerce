@@ -5,8 +5,8 @@
 - Here is an example:
   
   warehousedb:
-    image: warehouse
-    ports:
+    image: warehouse \\
+    ports:\\
       - 3307:3306
     restart: always
   
