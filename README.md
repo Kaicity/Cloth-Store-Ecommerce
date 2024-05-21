@@ -17,7 +17,7 @@
       - 3307:3306
     restart: always
   
-- If the image name is warehousedb, you must reconfigure it like this
+- If the image name is warehousedb, you must reconfigure it like this.
   ```yaml
   warehousedb:
     image: warehousedb
