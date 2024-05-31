@@ -7,9 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface IExportingTransactionRepository extends JpaRepository<ExportingBillTransactionEntity,String> {
+public interface IExportingTransactionRepository extends JpaRepository<ExportingBillTransactionEntity, String> {
     @Query("select e from ExportingBillTransactionEntity e WHERE e.billID in :billIds")
     List<ExportingBillTransactionEntity> getAllDetails(@Param("billIds") List<String> billIds);
+
     @Query("select e from ExportingBillTransactionEntity e WHERE e.billID in :billIds")
     List<ExportingBillTransactionEntity> findTransactionbyId(@Param("billIds") String billIds);
 }

@@ -20,5 +20,8 @@ public interface IExportingbillService {
     void deleteExportingFullByid(String id);
 
     ExportingBillFullDto getExportingById(HttpServletRequest request, String id) throws IOException;
+
     void updateImporting(ExportingBillFullDto exportingBillFullDto);
+
+    List<ExportingBillFullDto> getExportingBillByIdCustomer(HttpServletRequest httpServletRequest, String id) throws IOException;
 }

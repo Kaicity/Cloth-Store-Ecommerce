@@ -27,13 +27,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**","/api/v1/Food/findAll",
-                                "/api/v1/Exportingbill/create").permitAll()
+                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/auth/**", "/api/v1/Food/findAll",
+                                "/api/v1/Exportingbill/create", "/api/v1/Exportingbill/getExportingBillHistory").permitAll()
                         .requestMatchers("/api/v1/**").hasAnyAuthority(Role.ADMIN.name())
-                       // .requestMatchers("/api/v1/user").hasAnyAuthority(Role.USER.name())
+                        // .requestMatchers("/api/v1/user").hasAnyAuthority(Role.USER.name())
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(jwtAuthenticationFilter,
@@ -55,7 +56,6 @@ public class SecurityConfiguration {
                 userDto.setCompanyId("Com1");
                 userDto.setEmail("Messi");
                 userDto.setRole(Role.ADMIN);
-
 
 
                 UserPrinciple userDetail = UserPrinciple.build(userDto);

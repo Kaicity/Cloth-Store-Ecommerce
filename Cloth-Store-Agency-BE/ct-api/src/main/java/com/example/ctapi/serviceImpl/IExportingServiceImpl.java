@@ -3,19 +3,16 @@ package com.example.ctapi.serviceImpl;
 import com.example.ctapi.dtos.response.*;
 import com.example.ctapi.mappers.IExportingbillMapper;
 import com.example.ctapi.mappers.IExportingbillTransactionMapper;
-import com.example.ctapi.mappers.IImportingTransactionMapper;
 import com.example.ctapi.services.IExportingbillService;
 import com.example.ctcommon.enums.BillStatus;
 import com.example.ctcommon.enums.TypeBillRealTime;
 import com.example.ctcommondal.entity.ExportbillEntity;
 import com.example.ctcommondal.entity.ExportingBillTransactionEntity;
-import com.example.ctcommondal.entity.ImportingTransactionEntity;
 import com.example.ctcommondal.repository.IExportingTransactionRepository;
 import com.example.ctcommondal.repository.IExportingbillRepository;
 import com.example.ctcoremodel.CustomerModel;
 import com.example.ctcoremodel.ProductModel;
 import com.example.ctcoremodel.ResponseModel;
-import com.example.ctcoremodel.SupplierModel;
 import com.example.ctcoreservice.services.IWarehouseRequestService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -154,8 +151,8 @@ public class IExportingServiceImpl implements IExportingbillService {
             List<String> importIds = new ArrayList<>();
             importIds.add(exportingDto.getCustomer().getId());
 
-             String customerId = exportingDto.getCustomer().getId();
-             List<String>customerIds=new ArrayList<>();
+            String customerId = exportingDto.getCustomer().getId();
+            List<String> customerIds = new ArrayList<>();
             customerIds.add(customerId);
 
             ResponseModel<List<CustomerModel>> reponeFromWareHouseCustomer = warehouseRequestService
@@ -163,7 +160,6 @@ public class IExportingServiceImpl implements IExportingbillService {
             List<CustomerModel> customerModels = reponeFromWareHouseCustomer != null ? reponeFromWareHouseCustomer.getResult() : new ArrayList<>();
             if (customerModels.size() == 0) exportingDto.setCustomer(null);
             else exportingDto.setCustomer(customerModels.get(0));
-
 
 
             List<ExportingBillTransactionEntity> ExportingTransactionEntities = iExportingTransactionRepository.findTransactionbyId(id);
@@ -290,6 +286,62 @@ public class IExportingServiceImpl implements IExportingbillService {
         List<String> ids = List.of("00474ba4-da19-43a6-b980-9e2b439e992e");
         ResponseModel<List<ProductModel>> rs = warehouseRequestService.getAllProductModelFromWarehouseByIds(request, ids);
         return rs.getResult();
+    }
+
+    @Override
+    public List<ExportingBillFullDto> getExportingBillByIdCustomer(HttpServletRequest request, String id) throws IOException {
+        int a = 0;
+        List<ExportbillEntity> exportbillEntities = this.iExportingbillRepository.findExportingBillByCustomerId(id);
+        List<ExportingBillDto> exportingBillDtos = IExportingbillMapper.INSTANCE.toFromExportingbillDto(exportbillEntities);
+
+        List<String> ids = exportingBillDtos.stream().map(ExportingBillDto::getId).collect(Collectors.toList());
+
+        List<ExportingBillTransactionEntity> exportingBillTransactionEntities = this.iExportingTransactionRepository.getAllDetails(ids);
+        List<ExportingBillTransactionDto> exportingBillTransactionDtos = IExportingbillTransactionMapper.
+                INSTANCE.toExportingBillTransactionDtoList(exportingBillTransactionEntities);
+
+        //lấy ra hết ids sản phẩm để gọi qua warehouse lấy full thông tin
+        List<String> productIds = exportingBillTransactionDtos.stream()
+                .map(ExportingBillTransactionDto::getProduct).map(ProductModel::getId).distinct()
+                .collect(Collectors.toList());
+
+        ResponseModel<List<ProductModel>> responseFromWareHouse = productIds.size() > 0 ? warehouseRequestService
+                .getAllProductModelFromWarehouseByIds(request, productIds) : null;
+
+        List<ProductModel> productModels = responseFromWareHouse != null ? responseFromWareHouse.getResult() : new ArrayList<>();
+
+        //Lấy ra hết danh sách khách hàng là thành viên cửa hàng để xem thông tin lịch sử đơn hàng
+        List<String> customerId = exportingBillDtos.stream().map(ExportingBillDto::getCustomer).map(CustomerModel::getId).collect(Collectors.toList());
+
+        ResponseModel<List<CustomerModel>> reponeFromWareHouseCustomer = warehouseRequestService
+                .getCustomerModelFromWarehouseByIds(request, customerId);
+        List<CustomerModel> customerModels = reponeFromWareHouseCustomer != null ? reponeFromWareHouseCustomer.getResult() : new ArrayList<>();
+
+        for (ExportingBillDto bill : exportingBillDtos) {
+            CustomerModel customer = customerModels.stream()
+                    .filter(customerValue -> customerValue.getId().equals(bill.getCustomer().getId())).findFirst().orElse(null);
+        }
+
+        // duyệt qua từng hóa đơn đặt hàng
+        List<ExportingBillFullDto> exportingBillFullDtos = new ArrayList<>();
+        for (ExportingBillDto e : exportingBillDtos) {
+            ExportingBillFullDto export = new ExportingBillFullDto();
+            export.setExportingBill(e);
+            //lấy hết tất cả chi tiết
+            List<ExportingBillTransactionDto> details = exportingBillTransactionDtos
+                    .stream().filter(detail -> detail.getBill().getId().equals(e.getId())).collect(Collectors.toList());
+            for (ExportingBillTransactionDto detail : details) {
+                detail.setBill(null);
+                ProductModel productOfDetail = productModels
+                        .stream().filter(product -> product.getId().equals(detail.getProduct().getId())).findFirst().orElse(null);
+                detail.setProduct(productOfDetail);
+            }
+            export.setExportingBillTransactions(details);
+            exportingBillTransactionDtos.removeAll(details);
+            exportingBillFullDtos.add(export);
+        }
+
+        return exportingBillFullDtos;
     }
 }
 

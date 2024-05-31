@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -82,7 +83,6 @@ public class ExportingbillController {
     @PostMapping("/findExportingAll")
     private ResponseEntity<?> seachAllExporting(HttpServletRequest request) {
         try {
-            int a = 0;
             var result = exportingbillService.getAllExportingBillUseBaseSearch(request);
             return ResponseEntity.ok(new ResponseDto(List.of("Successful for find!"), HttpStatus.OK.value(), result));
 
@@ -115,6 +115,21 @@ public class ExportingbillController {
         try {
             List<ProductModel> result = exportingbillService.getTesTToWarehouse(request);
             return ResponseEntity.ok(new ResponseDto(List.of("get all bill success"),
+                    HttpStatus.OK.value(), result));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return ResponseEntity.ok(new ResponseDto(List.of("get all bill unsuccess"),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(), null));
+        }
+    }
+
+    @PostMapping("/getExportingBillHistory")
+    public ResponseEntity<?> getOrderHistoryBill(HttpServletRequest request, @RequestBody Map<String, String> object) {
+        int a = 0;
+        String id = object.get("customer_id");
+        try {
+            List<ExportingBillFullDto> result = exportingbillService.getExportingBillByIdCustomer(request, id);
+            return ResponseEntity.ok(new ResponseDto(List.of("get all bill history success"),
                     HttpStatus.OK.value(), result));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
