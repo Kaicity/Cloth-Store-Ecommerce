@@ -50,11 +50,11 @@ public class SecurityConfiguration {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 UserDto userDto = new UserDto();
-                userDto.setId("123");
+                userDto.setId("8839yg-vf8");
                 userDto.setFullName("Ronaldomessi");
                 userDto.setPhone("0123123123");
-                userDto.setCompanyId("Com1");
-                userDto.setEmail("Messi");
+                userDto.setCompanyId("TMA solutions");
+                userDto.setEmail("Itmix");
                 userDto.setRole(Role.ADMIN);
 
 

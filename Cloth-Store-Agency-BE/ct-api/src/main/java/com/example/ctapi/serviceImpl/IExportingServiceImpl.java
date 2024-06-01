@@ -289,9 +289,9 @@ public class IExportingServiceImpl implements IExportingbillService {
     }
 
     @Override
-    public List<ExportingBillFullDto> getExportingBillByIdCustomer(HttpServletRequest request, String id) throws IOException {
+    public List<ExportingBillFullDto> getExportingBillByIdCustomer(HttpServletRequest request, CustomerModel customer) throws IOException {
         int a = 0;
-        List<ExportbillEntity> exportbillEntities = this.iExportingbillRepository.findExportingBillByCustomerId(id);
+        List<ExportbillEntity> exportbillEntities = this.iExportingbillRepository.findExportingBillByCustomerId(customer.getId());
         List<ExportingBillDto> exportingBillDtos = IExportingbillMapper.INSTANCE.toFromExportingbillDto(exportbillEntities);
 
         List<String> ids = exportingBillDtos.stream().map(ExportingBillDto::getId).collect(Collectors.toList());
@@ -313,13 +313,14 @@ public class IExportingServiceImpl implements IExportingbillService {
         //Lấy ra hết danh sách khách hàng là thành viên cửa hàng để xem thông tin lịch sử đơn hàng
         List<String> customerId = exportingBillDtos.stream().map(ExportingBillDto::getCustomer).map(CustomerModel::getId).collect(Collectors.toList());
 
-        ResponseModel<List<CustomerModel>> reponeFromWareHouseCustomer = warehouseRequestService
+        ResponseModel<List<CustomerModel>> responeFromWareHouseCustomer = warehouseRequestService
                 .getCustomerModelFromWarehouseByIds(request, customerId);
-        List<CustomerModel> customerModels = reponeFromWareHouseCustomer != null ? reponeFromWareHouseCustomer.getResult() : new ArrayList<>();
+        List<CustomerModel> customerModels = responeFromWareHouseCustomer != null ? responeFromWareHouseCustomer.getResult() : new ArrayList<>();
 
         for (ExportingBillDto bill : exportingBillDtos) {
-            CustomerModel customer = customerModels.stream()
+            CustomerModel customerObject = customerModels.stream()
                     .filter(customerValue -> customerValue.getId().equals(bill.getCustomer().getId())).findFirst().orElse(null);
+            bill.setCustomer(customerObject);
         }
 
         // duyệt qua từng hóa đơn đặt hàng
@@ -340,7 +341,6 @@ public class IExportingServiceImpl implements IExportingbillService {
             exportingBillTransactionDtos.removeAll(details);
             exportingBillFullDtos.add(export);
         }
-
         return exportingBillFullDtos;
     }
 }

@@ -78,6 +78,7 @@ export class ShippingComponent implements OnInit {
 
     //Create bill API
     this.exportingBillService.addBill(dataExportingBillFull).subscribe(res => {
+
     })
 
     //Hoan tat qua trinh mua va dat hang ???

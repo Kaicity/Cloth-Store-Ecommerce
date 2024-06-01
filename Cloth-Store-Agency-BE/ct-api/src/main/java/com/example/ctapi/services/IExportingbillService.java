@@ -2,6 +2,7 @@ package com.example.ctapi.services;
 
 import com.example.ctapi.dtos.response.ExportingBillFullDto;
 import com.example.ctapi.dtos.response.ExportingBillFullSearchDto;
+import com.example.ctcoremodel.CustomerModel;
 import com.example.ctcoremodel.ProductModel;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -23,5 +24,5 @@ public interface IExportingbillService {
 
     void updateImporting(ExportingBillFullDto exportingBillFullDto);
 
-    List<ExportingBillFullDto> getExportingBillByIdCustomer(HttpServletRequest httpServletRequest, String id) throws IOException;
+    List<ExportingBillFullDto> getExportingBillByIdCustomer(HttpServletRequest httpServletRequest, CustomerModel customer) throws IOException;
 }

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ExportingBillFullModel} from "../../bm-api/dtos/exporting-bill-full.model";
-import {BaseSearchModel} from "../../bm-api/dtos/base-search.model";
 import {ResponseModel} from "../../bm-api/dtos/response.model";
 import {ExportingbillService} from "../../bm-api/Services/agency/ExportingbillService";
+import {CustomerModel} from "../../bm-api/dtos/customer.model";
 
 @Component({
   selector: 'app-order-history',
@@ -10,26 +10,33 @@ import {ExportingbillService} from "../../bm-api/Services/agency/ExportingbillSe
   styleUrls: ['./order-history.component.css']
 })
 export class OrderHistoryComponent implements OnInit {
-  exportingBillSearch: BaseSearchModel<ExportingBillFullModel[]> = new BaseSearchModel<ExportingBillFullModel[]>();
+  exportingBillOrders: ExportingBillFullModel[] = [];
+  customerObject: CustomerModel = new CustomerModel();
+  currentDateTime!: string;
+  firstImage: string | undefined;
 
   constructor(private exportingBillService: ExportingbillService) {
+
   }
 
   ngOnInit(): void {
     this.getAllOrderHistory();
-    console.log(this.exportingBillSearch);
+    this.getDateTimeCurrent();
+    setInterval(() => {
+      this.getDateTimeCurrent()
+    }, 1000);
   }
 
   getAllOrderHistory(): void {
     var getDataCustomer = localStorage.getItem('customer');
-    var convertToObject = JSON.parse(getDataCustomer!);
+    this.customerObject = JSON.parse(getDataCustomer!);
 
-    this.exportingBillService.getBillOrder(convertToObject.id!).subscribe(data => {
-      this.getAllOrderHistoryToComplete(data);
+    this.exportingBillService.getBillOrder(this.customerObject).subscribe(data => {
+      this.getAllOrderHistoryToComplete(data)
     })
   }
 
-  getAllOrderHistoryToComplete(res: ResponseModel<BaseSearchModel<ExportingBillFullModel[]>>): void {
+  getAllOrderHistoryToComplete(res: ResponseModel<ExportingBillFullModel[]>): void {
     if (res.status !== 200) {
       if (res.message) {
         res.message.forEach(value => {
@@ -39,8 +46,18 @@ export class OrderHistoryComponent implements OnInit {
       }
       return;
     }
-
     //return data
-    this.exportingBillSearch = res.result
+    this.exportingBillOrders = res.result;
   }
+
+  getDateTimeCurrent(): void {
+    const date = new Date();
+    this.currentDateTime = date.toLocaleDateString('vi-VN', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }) + ", " + date.toLocaleTimeString();
+  }
+
 }

@@ -11,8 +11,7 @@ export class ExportingbillService extends AgencyBaseService {
     return this.post('/api/v1/Exportingbill/create', exportingbillFull);
   }
 
-  public getBillOrder(customer_id: string): Observable<any> {
-    const body = {customer_id: customer_id}
-    return this.post('/api/v1/Exportingbill/getExportingBillHistory', body);
+  public getBillOrder(customer: any): Observable<any> {
+    return this.post('/api/v1/Exportingbill/getExportingBillHistory', customer);
   }
 }

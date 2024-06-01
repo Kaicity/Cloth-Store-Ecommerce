@@ -6,6 +6,7 @@ import com.example.ctapi.dtos.response.ResponseDto;
 import com.example.ctapi.dtos.response.SocketMessage;
 import com.example.ctapi.serviceImpl.IExportingServiceImpl;
 import com.example.ctapi.services.IExportingbillService;
+import com.example.ctcoremodel.CustomerModel;
 import com.example.ctcoremodel.ProductModel;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -124,11 +125,10 @@ public class ExportingbillController {
     }
 
     @PostMapping("/getExportingBillHistory")
-    public ResponseEntity<?> getOrderHistoryBill(HttpServletRequest request, @RequestBody Map<String, String> object) {
+    public ResponseEntity<?> getOrderHistoryBill(HttpServletRequest request, @RequestBody CustomerModel customer) {
         int a = 0;
-        String id = object.get("customer_id");
         try {
-            List<ExportingBillFullDto> result = exportingbillService.getExportingBillByIdCustomer(request, id);
+            List<ExportingBillFullDto> result = exportingbillService.getExportingBillByIdCustomer(request, customer);
             return ResponseEntity.ok(new ResponseDto(List.of("get all bill history success"),
                     HttpStatus.OK.value(), result));
         } catch (Exception e) {
