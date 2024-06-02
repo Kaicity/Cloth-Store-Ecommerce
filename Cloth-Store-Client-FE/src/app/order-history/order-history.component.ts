@@ -16,7 +16,7 @@ export class OrderHistoryComponent implements OnInit {
   currentDateTime!: string;
   ref: any;
 
-  constructor(private exportingBillService: ExportingbillService, private fireStorage: AngularFireStorage) {
+  constructor(private exportingBillService: ExportingbillService) {
 
   }
 
@@ -49,9 +49,6 @@ export class OrderHistoryComponent implements OnInit {
     }
     //return data
     this.exportingBillOrders = res.result;
-
-    //Set image
-    this.getImagePathFirebase();
   }
 
   getDateTimeCurrent(): void {
@@ -62,20 +59,5 @@ export class OrderHistoryComponent implements OnInit {
       month: 'long',
       year: 'numeric'
     }) + ", " + date.toLocaleTimeString();
-  }
-
-  getImagePathFirebase() {
-    //Code bởi NQTiến 12/05/2024 lay path hình ảnh từ firebase gán ngược lại giá trị image của product
-    this.exportingBillOrders.forEach(bill => {
-      bill.exportingBillTransactions?.forEach(billTrans => {
-        if (billTrans) {
-          const path = 'image_data_client/product/' + billTrans.product?.image; // Your image path
-          this.ref = this.fireStorage.ref(path);
-          this.ref.getDownloadURL().subscribe((url: any) => {
-            billTrans.product!.image = url;
-          })
-        }
-      })
-    })
   }
 }
