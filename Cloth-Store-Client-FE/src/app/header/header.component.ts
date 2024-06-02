@@ -10,7 +10,6 @@ interface OptionLanguages {
   viewValue: string;
 }
 
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',

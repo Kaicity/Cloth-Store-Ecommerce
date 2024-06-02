@@ -29,27 +29,222 @@
           hệ tư vấn</a>
       </div>
     </div>
-    <div class="d-flex justify-content-end mt-4">
-      <input type="text" class="p-3 bg-gray-100 w-80 w-md-auto mx-3 h-13" placeholder="Tìm kiếm">
-      <select class="form-select form-select-sm border-0 p-3 pe-5 lh-1 fs-7 bg-gray-100 h-13">
-        <option selected="">Sắp xếp</option>
-        <option value="1">Giá cao nhất</option>
-        <option value="2">Giá thấp nhất</option>
-        <option value="3">Tên A-Z</option>
-      </select>
-      <select class="form-select form-select-sm border-0 p-3 pe-5 lh-1 fs-7 bg-gray-100 mx-3 h-13">
-        <option selected="">Loại sản phẩm</option>
-        <option value="1">Giá cao nhất</option>
-        <option value="2">Giá thấp nhất</option>
-        <option value="3">Tên A-Z</option>
-      </select>
-      <button class="btn bg-black text-white p-3 align-items-center fs-7 lh-1 w-16 w-md-auto mx-3 h-13" type="button">
-        <svg class="h-6 w-6 stroke-2" viewBox="0 0 32 32" fill="none">
-          <circle cx="15" cy="14" r="8" stroke="currentColor" fill="transparent"></circle>
-          <line x1="21.1514" y1="19.7929" x2="26.707" y2="25.3484" stroke="currentColor" fill="transparent"></line>
-        </svg>
-      </button>
-    </div>
+
+    <section aria-labelledby="filter-heading" class="grid items-center border-b border-t border-gray-200">
+      <h2 id="filter-heading" class="sr-only">Mục được lọc</h2>
+      <div class="relative col-start-1 row-start-1 py-4">
+        <div class="mx-auto flex max-w-7xl space-x-6 divide-x divide-gray-200 px-4 text-sm sm:px-6 lg:px-8">
+          <div>
+            <a type="button" class="group flex items-center font-medium text-gray-700" aria-controls="disclosure-1"
+               aria-expanded="false">
+              <svg class="mr-2 h-5 w-5 flex-none text-gray-400 group-hover:text-gray-500" aria-hidden="true"
+                   viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                      d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z"
+                      clip-rule="evenodd"/>
+              </svg>
+              2 Filters
+            </a>
+          </div>
+          <div class="pl-6">
+            <a type="button" class="text-gray-500 cursor-pointer focus:font-bold active:font-bold">Xóa tất cả</a>
+          </div>
+          <div class="pl-6">
+            <a type="button" class="group flex items-center font-medium text-gray-700 cursor-pointer"
+               aria-controls="disclosure-1"
+               aria-expanded="false" (click)="toggleDropdownTabFilter()">
+              <svg class="mr-2 h-5 w-5 flex-none text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20"
+                   fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M9.29289 12.7071C9.68342 13.0976 10.3166 13.0976 10.7071 12.7071L14.7071 8.70711C15.0976 8.31658 15.0976 7.68342 14.7071 7.29289C14.3166 6.90237 13.6834 6.90237 13.2929 7.29289L10 10.5858L6.70711 7.29289C6.31658 6.90237 5.68342 6.90237 5.29289 7.29289C4.90237 7.68342 4.90237 8.31658 5.29289 8.70711L9.29289 12.7071Z"
+                      fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-200 py-10" id="disclosure-1"
+           [ngClass]="{'hidden' : !showDropdownTabFilter, 'relative' : showDropdownTabFilter}">
+        <div class="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 px-4 text-sm sm:px-6 md:gap-x-6 lg:px-8">
+          <div class="grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6">
+            <fieldset>
+              <legend class="block font-medium">Giá</legend>
+              <div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="price-0" name="price[]" value="0" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="price-0" class="ml-3 min-w-0 flex-1 text-gray-600">100.000 đ - 200.000 đ</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="price-1" name="price[]" value="0" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="price-1" class="ml-3 min-w-0 flex-1 text-gray-600">200.000 đ - 300.000 đ</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="price-2" name="price[]" value="0" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="price-2" class="ml-3 min-w-0 flex-1 text-gray-600">300.000 đ - 400.000 đ</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="price-3" name="price[]" value="0" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="price-3" class="ml-3 min-w-0 flex-1 text-gray-600">400.000 đ - 600.000 đ</label>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend class="block font-medium">Màu Sắc</legend>
+              <div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="color-0" name="color[]" value="white" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="color-0" class="ml-3 min-w-0 flex-1 text-gray-600">Trắng</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="color-1" name="color[]" value="beige" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="color-1" class="ml-3 min-w-0 flex-1 text-gray-600">Đen</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="color-2" name="color[]" value="blue" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                         checked>
+                  <label for="color-2" class="ml-3 min-w-0 flex-1 text-gray-600">Xanh</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="color-3" name="color[]" value="brown" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="color-3" class="ml-3 min-w-0 flex-1 text-gray-600">Nâu</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="color-4" name="color[]" value="green" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="color-4" class="ml-3 min-w-0 flex-1 text-gray-600">Đỏ</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="color-5" name="color[]" value="purple" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="color-5" class="ml-3 min-w-0 flex-1 text-gray-600">Hồng cánh sen</label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          <div class="grid auto-rows-min grid-cols-1 gap-y-10 md:grid-cols-2 md:gap-x-6">
+            <fieldset>
+              <legend class="block font-medium">Size</legend>
+              <div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="size-0" name="size[]" value="xs" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="size-0" class="ml-3 min-w-0 flex-1 text-gray-600">XS</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="size-1" name="size[]" value="s" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                         checked>
+                  <label for="size-1" class="ml-3 min-w-0 flex-1 text-gray-600">S</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="size-2" name="size[]" value="m" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="size-2" class="ml-3 min-w-0 flex-1 text-gray-600">M</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="size-3" name="size[]" value="l" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="size-3" class="ml-3 min-w-0 flex-1 text-gray-600">L</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="size-4" name="size[]" value="xl" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="size-4" class="ml-3 min-w-0 flex-1 text-gray-600">XL</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="size-5" name="size[]" value="2xl" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="size-5" class="ml-3 min-w-0 flex-1 text-gray-600">2XL</label>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend class="block font-medium">Loại Sản Phẩm</legend>
+              <div class="space-y-6 pt-6 sm:space-y-4 sm:pt-4">
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="category-0" name="category[]" value="all-new-arrivals" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="category-0" class="ml-3 min-w-0 flex-1 text-gray-600">Tất cả sản phẩm mới nhất</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="category-1" name="category[]" value="tees" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="category-1" class="ml-3 min-w-0 flex-1 text-gray-600">Áo thun unisex</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="category-2" name="category[]" value="objects" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="category-2" class="ml-3 min-w-0 flex-1 text-gray-600">Áo khoác nam</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="category-3" name="category[]" value="sweatshirts" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="category-3" class="ml-3 min-w-0 flex-1 text-gray-600">Phụ kiện</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="category-4" name="category[]" value="pants-and-shorts" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="category-4" class="ml-3 min-w-0 flex-1 text-gray-600">Quần</label>
+                </div>
+                <div class="flex items-center text-base sm:text-sm">
+                  <input id="category-5" name="category[]" value="objects" type="checkbox"
+                         class="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                  <label for="category-5" class="ml-3 min-w-0 flex-1 text-gray-600">Limited</label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-start-1 row-start-1 py-4">
+        <div class="mx-auto flex max-w-7xl justify-end px-4 sm:px-6 lg:px-8">
+          <div class="relative inline-block">
+            <div class="flex">
+              <a type="button"
+                 class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900 cursor-pointer"
+                 id="menu-button" aria-expanded="false" aria-haspopup="true" (click)="toggleDropdownSort()">
+                Sort
+                <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                     viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                        clip-rule="evenodd"/>
+                </svg>
+              </a>
+            </div>
+
+            <div
+              [ngClass]="{'hidden': !showDropdownSort, 'absolute': showDropdownSort, 'right-0': showDropdownSort,
+               'z-10': showDropdownSort, 'mt-2': showDropdownSort, 'w-40': showDropdownSort,
+                'origin-top-right': showDropdownSort, 'rounded-md': showDropdownSort, 'bg-white': showDropdownSort,
+                 'shadow-2xl': showDropdownSort, 'ring-1': showDropdownSort, 'ring-black': showDropdownSort,
+                  'ring-opacity-5': showDropdownSort, 'focus:outline-none': showDropdownSort, 'ac': showDropdownSort}"
+              class="transition ease-out duration-100" role="menu" aria-orientation="vertical"
+              aria-labelledby="menu-button" tabindex="-1">
+              <div class="py-1" role="none">
+                <a href="#" class="font-medium text-gray-900 block px-4 py-2 text-sm" role="menuitem" tabindex="-1"
+                   id="menu-item-0">Most Popular</a>
+                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1"
+                   id="menu-item-1">Best Rating</a>
+                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1"
+                   id="menu-item-2">Newest</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <br>
     <h2 class="text-3xl tracking-tight text-gray-900 text-center">Tất cả sản phẩm</h2><br>
     <app-spinner [show]="isLoading"></app-spinner>

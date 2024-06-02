@@ -3,6 +3,7 @@ import {ExportingBillFullModel} from "../../bm-api/dtos/exporting-bill-full.mode
 import {ResponseModel} from "../../bm-api/dtos/response.model";
 import {ExportingbillService} from "../../bm-api/Services/agency/ExportingbillService";
 import {CustomerModel} from "../../bm-api/dtos/customer.model";
+import {AngularFireStorage} from "@angular/fire/compat/storage";
 
 @Component({
   selector: 'app-order-history',
@@ -13,9 +14,9 @@ export class OrderHistoryComponent implements OnInit {
   exportingBillOrders: ExportingBillFullModel[] = [];
   customerObject: CustomerModel = new CustomerModel();
   currentDateTime!: string;
-  firstImage: string | undefined;
+  ref: any;
 
-  constructor(private exportingBillService: ExportingbillService) {
+  constructor(private exportingBillService: ExportingbillService, private fireStorage: AngularFireStorage) {
 
   }
 
@@ -48,6 +49,9 @@ export class OrderHistoryComponent implements OnInit {
     }
     //return data
     this.exportingBillOrders = res.result;
+
+    //Set image
+    this.getImagePathFirebase();
   }
 
   getDateTimeCurrent(): void {
@@ -60,4 +64,18 @@ export class OrderHistoryComponent implements OnInit {
     }) + ", " + date.toLocaleTimeString();
   }
 
+  getImagePathFirebase() {
+    //Code bởi NQTiến 12/05/2024 lay path hình ảnh từ firebase gán ngược lại giá trị image của product
+    this.exportingBillOrders.forEach(bill => {
+      bill.exportingBillTransactions?.forEach(billTrans => {
+        if (billTrans) {
+          const path = 'image_data_client/product/' + billTrans.product?.image; // Your image path
+          this.ref = this.fireStorage.ref(path);
+          this.ref.getDownloadURL().subscribe((url: any) => {
+            billTrans.product!.image = url;
+          })
+        }
+      })
+    })
+  }
 }

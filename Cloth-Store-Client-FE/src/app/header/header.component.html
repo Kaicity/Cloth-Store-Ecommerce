@@ -83,9 +83,6 @@
 
         <div class="space-y-6 border-t border-gray-200 px-4 py-6">
           <div class="flow-root">
-            <a routerLink="/homepage" class="-m-2 block p-2 font-medium text-gray-900">Trang chủ</a>
-          </div>
-          <div class="flow-root">
             <a routerLink="/product" class="-m-2 block p-2 font-medium text-gray-900">Sản phẩm</a>
           </div>
           <div class="flow-root">
@@ -93,9 +90,6 @@
           </div>
           <div class="flow-root">
             <a routerLink="/contact" class="-m-2 block p-2 font-medium text-gray-900">Liên hệ</a>
-          </div>
-          <div class="flow-root">
-            <a routerLink="/store-service" class="-m-2 block p-2 font-medium text-gray-900">Ưu đãi</a>
           </div>
         </div>
 
@@ -153,17 +147,24 @@
 
           <!-- Flyout menus -->
           <div class="hidden lg:ml-8 lg:block lg:self-stretch">
-            <div class="flex h-full space-x-8">
-              <a routerLink="/homepage" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Trang
-                chủ</a>
-              <a routerLink="/product" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Sản
-                phẩm</a>
+            <div class="flex h-full space-x-8 items-center">
+              <div class="relative group">
+                <a routerLink="/product" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
+                  Sản phẩm
+                </a>
+                <!-- Dropdown Container -->
+                <div class="absolute hidden bg-white rounded-md shadow-lg w-48 py-1 group-hover:block transition-opacity duration-200">
+                  <a routerLink="/product1" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Nam</a>
+                  <a routerLink="/product2" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Nữ</a>
+                  <a routerLink="/product3" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Giày dép và Phụ Kiện</a>
+                  <a routerLink="/product2" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mới nhất</a>
+                  <a routerLink="/product3" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Best Seller</a>
+                </div>
+              </div>
               <a routerLink="/about-us" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Giới
                 thiệu</a>
               <a routerLink="/contact" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Liên
                 hệ</a>
-              <a routerLink="/store-service"
-                 class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Ưu đãi</a>
             </div>
           </div>
 
@@ -231,10 +232,10 @@
                    role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                 <!-- Active: "bg-gray-100", Not Active: "" -->
                 <a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-                   id="user-menu-item-0">Người dùng, <span>{{ titleName }}</span></a>
+                   id="user-menu-item-0">Khách hàng, <span class="text-blue-600 font-bold">{{ titleName }}</span></a>
                 <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
-                   id="user-menu-item-1">Cài đặt</a>
-                <a routerLink="/order-history" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                   id="user-menu-item-1" *ngIf="!isCheckHasAccount">Thông tin khách hàng</a>
+                <a routerLink="/order-history" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" *ngIf="!isCheckHasAccount"
                    tabindex="-1"
                    id="user-menu-item-3">Xem lịch sử mua hàng</a>
                 <a class="block px-4 py-2 text-sm text-gray-700 cursor-pointer" role="menuitem" tabindex="-1"

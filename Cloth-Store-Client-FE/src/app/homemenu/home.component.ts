@@ -122,4 +122,14 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getAllProduct();
   }
+
+  showDropdownSort: boolean = false;
+  toggleDropdownSort() {
+    this.showDropdownSort = !this.showDropdownSort;
+  }
+
+  showDropdownTabFilter: boolean = false;
+  toggleDropdownTabFilter() {
+    this.showDropdownTabFilter = !this.showDropdownTabFilter;
+  }
 }
