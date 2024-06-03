@@ -22,8 +22,12 @@ public interface ICustomerService {
     void deleteCustomerById(String id);
 
     void updateCustomer(CustomerDto customer);
+
     CustomerSearchDto getAllCustomerBaseSearch();
+
     CustomerDto getCustomerByIds(String id);
+
     List<CustomerDto> getAllCustomerListId(List<String> ids);
+
     CustomerDto getAllCustomerListcode(String ids);
 }

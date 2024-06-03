@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CustomerModel} from "../../bm-api/dtos/customer.model";
 import {NavigationEnd, Router} from "@angular/router";
 import {ExportingBillTransactionModel} from "../../bm-api/dtos/exporting-bill-transaction.model";
@@ -15,16 +15,18 @@ interface OptionLanguages {
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   customerAccountTitle!: CustomerModel
   isLoading: boolean = false;
   titleName!: string;
   isCheckHasAccount: boolean = true;
   isShowMenuUser: boolean = true;
   isShowMenuMobile: boolean = true;
+  isStatusSearch: boolean = false;
 
   cartItem: ExportingBillTransactionModel[] = [];
   imageUrl!: Observable<any[]>;
+  showSearch: boolean = false;
 
 
   constructor(private router: Router, private storageService: AngularFireStorage) {
@@ -41,6 +43,10 @@ export class HeaderComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
+  }
+
   ngOnInit(): void {
     const storeCustomer = localStorage.getItem('customer');
     if (storeCustomer) {
@@ -54,6 +60,10 @@ export class HeaderComponent implements OnInit {
     if (getCardItemSaving) {
       this.cartItem = [];
       this.cartItem = JSON.parse(getCardItemSaving);
+    }
+
+    if (this.showSearch) {
+      this.disableScroll();
     }
   }
 
@@ -92,5 +102,26 @@ export class HeaderComponent implements OnInit {
 
   btnCloseMenuMobile() {
     this.isShowMenuMobile = true;
+  }
+
+  toggleShowSearch(): void {
+    this.showSearch = !this.showSearch;
+    if (this.showSearch) {
+      this.disableScroll();
+    } else {
+      this.enableScroll();
+    }
+  }
+
+  disableScroll() {
+    document.body.style.overflow = 'hidden';
+  }
+
+  enableScroll() {
+    document.body.style.overflow = '';
+  }
+
+  submit() {
+
   }
 }

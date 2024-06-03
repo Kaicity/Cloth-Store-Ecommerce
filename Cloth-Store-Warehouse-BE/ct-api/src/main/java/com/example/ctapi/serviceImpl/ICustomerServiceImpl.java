@@ -124,9 +124,10 @@ public class ICustomerServiceImpl implements ICustomerService {
             throw e;
         }
     }
+
     @Override
     @Transactional
-    public  CustomerDto getAllCustomerListcode(String ids) {
+    public CustomerDto getAllCustomerListcode(String ids) {
         try {
             int a = 0;
             CustomerEntity customerList = customerRepository.findCustomerDTOBycode(ids);

@@ -6,19 +6,16 @@ import {Injectable} from "@angular/core";
   providedIn: 'root'
 })
 
-export class CustomerService extends warehouseBaseService{
+export class CustomerService extends warehouseBaseService {
 
 
-  public addUser(customerUser:any): Observable<any> {
-      return this.post('/api/v1/Customer/create', customerUser);
+  public addUser(customerUser: any): Observable<any> {
+    return this.post('/api/v1/Customer/create', customerUser);
   }
 
-  public getUser(username: String, password: String){
+  public getUser(username: string, password: string) {
     const body = {username, password};
     return this.post("/api/v1/Customer/login", body);
   }
 
-  public addUserInfo(customerUserInfo: any): Observable<any> {
-    return this.post('/api/v1/Customer/createInfo', customerUserInfo)
-  }
 }

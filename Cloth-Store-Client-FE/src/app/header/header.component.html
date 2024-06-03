@@ -149,16 +149,20 @@
           <div class="hidden lg:ml-8 lg:block lg:self-stretch">
             <div class="flex h-full space-x-8 items-center">
               <div class="relative group">
-                <a routerLink="/product" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
+                <a routerLink="/product"
+                   class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">
                   Sản phẩm
                 </a>
                 <!-- Dropdown Container -->
-                <div class="absolute hidden bg-white rounded-md shadow-lg w-48 py-1 group-hover:block transition-opacity duration-200">
+                <div
+                  class="absolute hidden bg-white rounded-md shadow-lg w-48 py-1 group-hover:block transition-opacity duration-200">
                   <a routerLink="/product1" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Nam</a>
                   <a routerLink="/product2" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Nữ</a>
-                  <a routerLink="/product3" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Giày dép và Phụ Kiện</a>
+                  <a routerLink="/product3" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Giày dép và
+                    Phụ Kiện</a>
                   <a routerLink="/product2" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mới nhất</a>
-                  <a routerLink="/product3" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Best Seller</a>
+                  <a routerLink="/product3" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Best
+                    Seller</a>
                 </div>
               </div>
               <a routerLink="/about-us" class="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800">Giới
@@ -189,7 +193,7 @@
 
             <!-- Search -->
             <div class="flex lg:ml-6">
-              <a href="#" class="p-2 text-gray-400 hover:text-gray-500">
+              <a class="p-2 text-gray-400 hover:text-gray-500 cursor-pointer" (click)="toggleShowSearch()">
                 <span class="sr-only">Search</span>
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                      aria-hidden="true">
@@ -235,7 +239,8 @@
                    id="user-menu-item-0">Khách hàng, <span class="text-blue-600 font-bold">{{ titleName }}</span></a>
                 <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
                    id="user-menu-item-1" *ngIf="!isCheckHasAccount">Thông tin khách hàng</a>
-                <a routerLink="/order-history" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" *ngIf="!isCheckHasAccount"
+                <a routerLink="/order-history" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                   *ngIf="!isCheckHasAccount"
                    tabindex="-1"
                    id="user-menu-item-3">Xem lịch sử mua hàng</a>
                 <a class="block px-4 py-2 text-sm text-gray-700 cursor-pointer" role="menuitem" tabindex="-1"
@@ -249,4 +254,51 @@
     </nav>
   </header>
 </div>
+
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" *ngIf="showSearch">
+  <div class="w-11/12 md:w-full max-w-2xl mx-2 md:top-0 bg-white p-4 rounded-lg shadow-lg mt-0 sm:mt-20 md:mt-0">
+    <div class="flex w-full rounded bg-gray-100">
+      <input
+        class="w-full border-none bg-transparent px-4 py-1 text-gray-700 outline-none focus:outline-none"
+        type="search"
+        name="search"
+        placeholder="Tìm kiếm..."
+      />
+      <button type="submit" class="m-1 rounded bg-blue-600 px-4 py-2 text-white">
+        <svg
+          class="fill-current h-6 w-6"
+          xmlns="http://www.w3.org/2000/svg"
+          version="1.1"
+          id="Capa_1"
+          x="0px"
+          y="0px"
+          viewBox="0 0 56.966 56.966"
+          style="enable-background:new 0 0 56.966 56.966;"
+          xml:space="preserve"
+          width="512px"
+          height="512px"
+        >
+          <path
+            d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"
+          />
+        </svg>
+      </button>
+      <button
+        (click)="toggleShowSearch()"
+        class="ml-2 text-gray-500 hover:text-gray-700"
+      >
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 

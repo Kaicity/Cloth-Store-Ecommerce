@@ -3,7 +3,11 @@ import {ExportingBillFullModel} from "../../bm-api/dtos/exporting-bill-full.mode
 import {ResponseModel} from "../../bm-api/dtos/response.model";
 import {ExportingbillService} from "../../bm-api/Services/agency/ExportingbillService";
 import {CustomerModel} from "../../bm-api/dtos/customer.model";
-import {AngularFireStorage} from "@angular/fire/compat/storage";
+
+interface ExportingBillStatus {
+  display: string,
+  value: string,
+}
 
 @Component({
   selector: 'app-order-history',
@@ -15,6 +19,14 @@ export class OrderHistoryComponent implements OnInit {
   customerObject: CustomerModel = new CustomerModel();
   currentDateTime!: string;
   ref: any;
+
+  exportingBillStatuses: ExportingBillStatus[] = [
+    {display: 'Đang đặt hàng', value: 'BOOKING'},
+    {display: 'Đang vận chuyển', value: 'SHIPPING'},
+    {display: 'Đã kiểm duyệt', value: 'CHECKED'},
+    {display: 'Đã hủy', value: 'CANCELLED'},
+    {display: 'Đã hoàn tất', value: 'COMPLETED'}
+  ];
 
   constructor(private exportingBillService: ExportingbillService) {
 
@@ -49,6 +61,9 @@ export class OrderHistoryComponent implements OnInit {
     }
     //return data
     this.exportingBillOrders = res.result;
+
+    //Set status display
+    this.setValueExportingBillStatus();
   }
 
   getDateTimeCurrent(): void {
@@ -59,5 +74,16 @@ export class OrderHistoryComponent implements OnInit {
       month: 'long',
       year: 'numeric'
     }) + ", " + date.toLocaleTimeString();
+  }
+
+  setValueExportingBillStatus(): void {
+    this.exportingBillOrders.forEach(bill => {
+      this.exportingBillStatuses.forEach(object => {
+        if (bill.exportingBill?.status === object.value) {
+          bill.exportingBill.status = object.display;
+        }
+        return;
+      })
+    });
   }
 }
